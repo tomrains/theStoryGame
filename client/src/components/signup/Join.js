@@ -72,6 +72,9 @@ class Join extends React.Component {
       else if (gameId === "secret-wildwood-99621.herokuapp.com") {
         gameId = "";
       }
+      else if (gameId === "localhost:3000") {
+        gameId = "";
+      }
       else if (gameId === "join") {
         gameId = "";
       }
@@ -82,10 +85,11 @@ class Join extends React.Component {
         //nothing
       }
     }
-    // console.log(gameId);
+    console.log(gameId);
     // Check server for game - need to add error functionality to this
-    axios.get(`api/games/${gameId}`)
+    axios.get(`api/${gameId}`)
       //this should have an if statement. how do we do those?
+      // .then(res => console.log((res.data[0].rounds)));
       .then(res => this.props.howManyRounds(res.data[0].rounds));
     this.props.updateGameId(gameId);
   }

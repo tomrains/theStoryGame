@@ -33,14 +33,4 @@ router.put('/:code/startGame', (req, res) => {
   });
 });
 
-// @route   GET api/games/:code
-// @desc    Get a game's info by ID
-// @check   Passed
-router.get('/:code', (req, res) => {
-  let code = req.params.code;
-  Game.find({code: code}, function(err, game) {
-      res.json(game);
-  });
-});
-
 module.exports = router;
