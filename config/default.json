@@ -1,0 +1,3 @@
+{
+    "mongoURI": "mongodb+srv://tomrains:tommi14@cluster0-d645f.mongodb.net/story-game-app?retryWrites=true&w=majority"
+}
