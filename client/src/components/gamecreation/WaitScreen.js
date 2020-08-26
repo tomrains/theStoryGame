@@ -129,7 +129,7 @@ class WaitScreen extends React.Component {
           </div>
         ) : (
           <div>
-            <button type="button"className="btn btn-success" onClick={this.props.startGame}>
+            <button onClick={this.props.startGame}>
               <Link to='/writing'>Start Game</Link>
             </button>
           </div>
