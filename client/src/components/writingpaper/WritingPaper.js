@@ -37,29 +37,17 @@ class Writingpaper extends React.Component {
     clearInterval(this.intervalID);
   }
 
-  // getPlayers = () => {
-  //   //this shows undefined
-  //   if (this.props.gameId) {
-  //     console.log(`This.props.gameId is: ${this.props.gameId}`)
-  //     // axios.get(`http://localhost:4000/games/${this.props.gameId}/players`)
-  //     axios.get(`http://localhost:4000/games/${this.props.gameId}/players`)
-  //       // .then(game => this.setState({ gameInfo: game.data[0].players }));
-  //       .then(game => this.setState({ gameInfo: game.data[0].players }));
-  //       // console.log(this.state.gameInfo);
-  //   }
-  // }
-
   hasEveryoneSubmitted = () => {
     if (this.state.storySubmitted && !this.props.hasFinalStory) {
     // list what this should do
-    axios.get(`http://localhost:4000/games/${this.props.gameId}/storiesSubmitted`)
+    axios.get(`api/stories/${this.props.gameId}/storiesSubmitted`)
       .then(res => this.setState({ everyoneHasSubmitted: res.data }));
     if (this.props.isLastRound && this.state.everyoneHasSubmitted) {
       let info = {
         code: this.props.gameId,
         playerNumber: this.props.playerNumber
       }
-      axios.get(`http://localhost:4000/games/${this.props.gameId}/${this.props.playerNumber}/finalStory`, info)
+      axios.get(`api/stories/${this.props.gameId}/${this.props.playerNumber}/finalStory`, info)
         .then(res => this.props.updateFinalStory(res.data))
         .then(this.props.updateHasFinalStory())
         .then(this.setState({ storySubmitted: true })); //might not need this part due to logic in render. test?
@@ -70,7 +58,7 @@ class Writingpaper extends React.Component {
         code: this.props.gameId,
         playerNumber: this.props.playerNumber
       }
-      axios.put(`http://localhost:4000/games/${this.props.gameId}/grabNewStory`, info)
+      axios.put(`api/stories/${this.props.gameId}/grabNewStory`, info)
         .then(res => this.setState({
           previousPersonsWriting: res.data.story,
           previousPerson: res.data.player,
@@ -89,31 +77,6 @@ class Writingpaper extends React.Component {
   }
 }
 
-
-    // axios.get(`http://localhost:4000/games/${this.props.gameId}/players`)
-    //   .then(game => this.setState({ gameInfo: game.data[0].players }));
-    // //   .then(game => this.setState({ gameInfo: game.data[0].players }))
-    // //   .then(game => this.setState({ gameStarted: game.data[0].gameStarted }));
-    // //   console.log(this.state.gameInfo);
-
-      //
-    //   .then(
-    //     if (res) {
-    //     console.log("i got nothing");
-    //   }
-    //   else {
-    //     console.log("there's something here");
-    //   }
-    // );
-      //need to identify whether nothing happened (you get a number) or if you got a story (array/string)
-    //and have the backend keep some counter so it knows its sent
-  // out all the correct stories and can update the roundNumber)
-    //
-
-  //make it where you click and text in writing box goes away
-  //eventually would like to add in a minimum where you cant submit if you havent wirrten enough...
-  //..maybe textbok could go from yellow to green once you've written enough
-
   updateStory = (e) => {
     //put the story into state so submit button can send it on
     this.setState({ story: e.target.value });
@@ -130,7 +93,7 @@ class Writingpaper extends React.Component {
       playerNumber: this.props.playerNumber,
       story: this.state.story
     }
-    axios.post(`http://localhost:4000/games/write/${this.props.gameId}`, playerStory)
+    axios.post(`api/stories/write/${this.props.gameId}`, playerStory)
       .then(this.setState({
         charactersUsed: 0,
         charactersLeft: 150,

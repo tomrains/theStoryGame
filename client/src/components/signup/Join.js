@@ -42,7 +42,7 @@ class Join extends React.Component {
     }
     console.log(player);
     console.log(`the gameid in putPlayer is: ${this.props.gameId}`);
-    axios.put(`http://localhost:4000/games/${this.props.gameId}`, player)
+    axios.put(`api/players/${this.props.gameId}`, player)
     .then(playerNumber => this.props.updatePlayerNumber(playerNumber.data))
     .then(this.setState({ playerSubmitted: true }));
 
@@ -69,7 +69,7 @@ class Join extends React.Component {
       if (gameId === "http://") {
         gameId = "";
       }
-      else if (gameId === "localhost:3000") {
+      else if (gameId === "secret-wildwood-99621.herokuapp.com") {
         gameId = "";
       }
       else if (gameId === "join") {
@@ -84,7 +84,7 @@ class Join extends React.Component {
     }
     // console.log(gameId);
     // Check server for game - need to add error functionality to this
-    axios.get(`http://localhost:4000/games/${gameId}`)
+    axios.get(`api/games/${gameId}`)
       //this should have an if statement. how do we do those?
       .then(res => this.props.howManyRounds(res.data[0].rounds));
     this.props.updateGameId(gameId);

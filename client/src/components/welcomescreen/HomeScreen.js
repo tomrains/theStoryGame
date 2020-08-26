@@ -44,7 +44,7 @@ class HomeScreen extends React.Component {
     for ( var i = 0; i < 4; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    let gameIdUrl = `http://localhost:3000/join/${result}`
+    let gameIdUrl = `secret-wildwood-99621.herokuapp.com/join/${result}`
     // this.setState({ gameIdUrl: gameIdUrl });
     // this.setState({ gameId: result });
     this.props.updateGameId(result);
@@ -57,7 +57,7 @@ class HomeScreen extends React.Component {
     console.log(`the new game code is ${newGame.code}`);
     // axios.post('/add', newGame)
     // axios.post('http://localhost:4000/games/add', newGame)
-    axios.post('https://desolate-reaches-48875.herokuapp.com/games/add', newGame)
+    axios.post('/api/games/add', newGame)
         .then(res => console.log(res.data));
   }
 
@@ -77,7 +77,7 @@ class HomeScreen extends React.Component {
         }
     };
     console.log(newGameInfo);
-    axios.put('http://localhost:4000/games/add/:code', newGameInfo)
+    axios.put('api/players/add/:code', newGameInfo)
     // axios.put('/add/:code', newGameInfo)
         .then(res => console.log(res.data));
         this.props.updatePlayerNumber(0);

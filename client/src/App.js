@@ -5,14 +5,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // import "./App.css";
 import axios from 'axios';
 
-import CreateGame from "./components/create-game.component";
-import EditGame from "./components/edit-game.component";
-// import GamesList from "./components/games-list.component";
-
 //The real components
-import WaitScreen from './components/gamecreation/subcomponents/WaitScreen.js';
-import Join from './components/signup/subcomponents/Join.js'
-import StoryConcealed from './components/storyconcealed/StoryConcealed.js';
+import WaitScreen from './components/gamecreation/WaitScreen.js';
+import Join from './components/signup/Join.js'
 import StoryRevealed from './components/storyrevealed/StoryRevealed.js';
 import HomeScreen from './components/welcomescreen/HomeScreen.js';
 import WritingPaper from './components/writingpaper/WritingPaper.js';
@@ -36,64 +31,6 @@ class App extends Component {
       finalStory: null,
       hasFinalStory: false
     }
-    this.updatePlayers = this.updatePlayers.bind(this);
-  }
-
-  // showURL = () => {
-  //   const URL = window.location.href;
-  //   const lengthOfURL = URL.length;
-  //   let gameId = "";
-  //   for (let i = 0; i < lengthOfURL; i++) {
-  //     if (URL[i] === '?') {
-  //       //leave loop
-  //     }
-  //     else {
-  //       gameId = gameId + URL[i];
-  //     }
-  //     if (gameId === "http://") {
-  //       gameId = "";
-  //     }
-  //     else if (gameId === "localhost:3000") {
-  //       gameId = "";
-  //     }
-  //     else if (gameId === "/") {
-  //       gameId = "";
-  //     }
-  //     else {
-  //       //nothing
-  //     }
-  //   }
-  //   if (gameId === "") {
-  //     console.log("looks like we're on a homepage/create game page");
-  //     this.setState({ isHost: true });
-  //     return;
-  //   }
-  //   // console.log(gameId);
-  //   this.setState({ gameId: gameId })
-  //   //so now it should look for this gameCode on the backend to see if it exists
-  //   axios.get('/gameId', {
-  //     params: {
-  //       gameId: gameId
-  //     }
-  //   })
-  //   .then((doesGameIdExist) => console.log(doesGameIdExist.config.params))
-  //   .then(this.setState({ homeScreen: false }))
-  //   .then(this.setState({ join: true }))
-  //   .then(this.setState({ isHost: false }))
-  // };
-
-  // Fetch the list on first mount
-  componentDidMount() {
-    // this.showURL();
-    // axios.get('/userSessions');
-    // axios.get('/tryme');
-  }
-
-
-  updatePlayers = () => {
-    axios.get('/signup')
-    .then(playerInfo => this.setState({ players: playerInfo.data }))
-    console.log(this.state.players)
   }
 
   updateGameId = (gameId) => {
@@ -145,7 +82,7 @@ class App extends Component {
 
   startGame = () => {
     if (this.state.isHost) {
-      axios.put(`http://localhost:4000/games/${this.state.gameId}/startGame`)
+      axios.put(`api/games/${this.state.gameId}/startGame`)
     }
     else {
       return;
@@ -158,8 +95,6 @@ class App extends Component {
       <Router>
         <div className="container">
           <br/>
-          <Route path="/edit/:id" component={EditGame} />
-          <Route path="/create" component={CreateGame} />
           <Route
             path="/waitscreen"
             render={(props) => (
@@ -192,12 +127,6 @@ class App extends Component {
             updateName = {this.updateName}
             updateAvatar = {this.updateAvatar} />
             )}
-          />
-          <Route path="/lab" render={(props) => (
-            <StoryConcealed {...props}
-            test1 = {this.test1}
-            playerNumber = {this.state.playerNumber} />
-          )}
           />
           <Route path="/story" render={(props) => (
             <StoryRevealed {...props}
