@@ -55,7 +55,7 @@ class WaitScreen extends React.Component {
     if (this.props.gameId) {
       console.log(`This.props.gameId is: ${this.props.gameId}`);
       // axios.get(`http://localhost:4000/games/${this.props.gameId}/players`)
-      axios.get(`http://localhost:4000/games/${this.props.gameId}/players`)
+      axios.get(`api/players/${this.props.gameId}/players`)
         // .then(game => this.setState({ gameInfo: game.data[0].players }));
         .then(game => this.setState({
           gameInfo: game.data[0].players,
@@ -72,7 +72,7 @@ class WaitScreen extends React.Component {
     let gameStatus = {
       gameStatus: true
     }
-    axios.put(`http://localhost:4000/games/${this.props.gameId}/startGame`, gameStatus)
+    axios.put(`api/games/${this.props.gameId}/startGame`, gameStatus)
   }
 
   copyToClipboard = (e) => {
