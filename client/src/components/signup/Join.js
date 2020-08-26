@@ -118,7 +118,7 @@ class Join extends React.Component {
         <button disabled type="button" className="btn btn-success">Join Game</button>
         ) : (
         <div>
-          <button type="button"className="btn btn-success" onClick={this.putPlayer}>
+          <button onClick={this.putPlayer}>
             <Link to='/waitscreen'>Join Game</Link>
           </button>
         </div>
