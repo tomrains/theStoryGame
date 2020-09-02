@@ -7,14 +7,6 @@ const GameSchema = new mongoose.Schema({
         type: String,
         default: "Host"
     },
-    storiesSubmitted: {
-      type: Number,
-      default: 0
-    },
-    storiesReturned: {
-      type: Number,
-      default: 0
-    },
     code: {
         type: String
     },
@@ -34,7 +26,9 @@ const GameSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    players: [Player]
+    players: [Player],
+    storiesReturned: [],
+    storiesSubmitted: []
 });
 
 module.exports = mongoose.model('game', GameSchema);

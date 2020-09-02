@@ -40,25 +40,31 @@ class Writingpaper extends React.Component {
   hasEveryoneSubmitted = () => {
     if (this.state.storySubmitted && !this.props.hasFinalStory) {
     // list what this should do
-    axios.get(`api/stories/${this.props.gameId}/storiesSubmitted`)
+    let info1 = {
+      round: this.props.currentRound
+    }
+    console.log(`this.props.currentRound is ${this.props.currentRound}`);
+    axios.get(`api/stories/${this.props.gameId}/${this.props.currentRound}/storiesSubmitted`, info1)
       .then(res => this.setState({ everyoneHasSubmitted: res.data }));
     if (this.props.isLastRound && this.state.everyoneHasSubmitted) {
-      let info = {
+      let info2 = {
         code: this.props.gameId,
-        playerNumber: this.props.playerNumber
+        playerNumber: this.props.playerNumber,
+        round: this.props.currentRound
       }
-      axios.get(`api/stories/${this.props.gameId}/${this.props.playerNumber}/finalStory`, info)
+      axios.get(`api/stories/${this.props.gameId}/${this.props.playerNumber}/finalStory`, info2)
         .then(res => this.props.updateFinalStory(res.data))
         .then(this.props.updateHasFinalStory())
         .then(this.setState({ storySubmitted: true })); //might not need this part due to logic in render. test?
     }
     if (this.state.everyoneHasSubmitted && this.state.previousPersonsWriting === "Empty" && !this.props.isLastRound) {
       console.log("do the request for the story that is rightfully yours");
-      let info = {
+      let info3 = {
         code: this.props.gameId,
-        playerNumber: this.props.playerNumber
+        playerNumber: this.props.playerNumber,
+        round: this.props.currentRound
       }
-      axios.put(`api/stories/${this.props.gameId}/grabNewStory`, info)
+      axios.put(`api/stories/${this.props.gameId}/grabNewStory`, info3)
         .then(res => this.setState({
           previousPersonsWriting: res.data.story,
           previousPerson: res.data.player,
@@ -91,7 +97,8 @@ class Writingpaper extends React.Component {
     let playerStory = {
       code: this.props.gameId,
       playerNumber: this.props.playerNumber,
-      story: this.state.story
+      story: this.state.story,
+      round: this.props.currentRound
     }
     axios.post(`api/stories/write/${this.props.gameId}`, playerStory)
       .then(this.setState({
@@ -139,9 +146,9 @@ class Writingpaper extends React.Component {
     }
 
     //variables, logic and so on here
+    let lastLine;
     let previousPersonsWriting = this.state.previousPersonsWriting;
     let length = previousPersonsWriting.length;
-    let lastLine = "";
     for (let i = length - 50; i > 0 ; i--) {
       if (previousPersonsWriting[i] === " ") {
         lastLine = "..." + previousPersonsWriting.slice(i + 1, length);

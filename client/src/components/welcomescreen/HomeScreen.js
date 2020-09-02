@@ -119,10 +119,10 @@ class HomeScreen extends React.Component {
             {!this.props.playerName ||
               !this.props.playerAvatar ||
               !this.props.rounds ? (
-              <button disabled type="button" className="btn btn-success">Create Game</button>
+              <button disabled>Create Game</button>
               ) : (
               <div>
-                <button type="button" className="btn btn-success" onClick={this.createGame}>
+                <button onClick={this.createGame}>
                   <Link to='/waitscreen'>Create Game</Link>
                 </button>
               </div>

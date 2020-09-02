@@ -28,7 +28,37 @@ router.post('/add', (req, res) => {
 router.put('/:code/startGame', (req, res) => {
   let code = req.params.code;
   Game.findOne({code: code}, function(err, game) {
-    game.save(game.gameStarted = true);
+    game.gameStarted = true;
+    let rounds = game.rounds;
+    //Initialize submission array
+    let submitLocation = game.storiesSubmitted;
+    let submissionArray = [];
+    for (let i = 0; i < rounds; i++) {
+      let roundArray = [];
+      for (let q = 0; q < game.players.length; q++) {
+        roundArray.push(false);
+        console.log("false added!");
+      }
+      submissionArray.push(roundArray);
+      console.log("player array of falses added")
+    }
+    game.storiesSubmitted = submissionArray;
+    // Initialize returned array
+    let returnLocation = game.storiesReturned;
+    let returnArray = [];
+    for (let t = 0; t < rounds; t++) {
+      let roundArray2 = [];
+      for (let v = 0; v < game.players.length; v++) {
+        roundArray2.push(false);
+        console.log("false added!");
+      }
+      returnArray.push(roundArray2);
+      console.log("player array of falses added")
+    }
+    game.storiesReturned = returnArray;
+    game.save();
+    console.log(game.storiesSubmitted);
+    console.log(game.storiesReturned);
     res.json(game);
   });
 });
