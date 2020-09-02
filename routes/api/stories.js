@@ -86,6 +86,7 @@ router.put('/:code/grabNewStory', (req, res) => {
       storyNumber = length - 1;
       console.log(`storyNumber is ${storyNumber}`);
     }
+    game.storiesReturned[round][playerNumber] = true;
     let storyToSend = game.players[storyNumber].story[game.currentRound - 1];
     if (!storyToSend) {
       return;
@@ -93,7 +94,9 @@ router.put('/:code/grabNewStory', (req, res) => {
     // console.log(`the story to send is ${storyToSend}`);
     // console.log(game.storiesReturned);
     //set correct array location to true
-    game.storiesReturned[round][playerNumber] = true;
+
+    //trying to move the below
+    // game.storiesReturned[round][playerNumber] = true;
     let isLastRound = false;
 
     //return if player is behind on rounds
