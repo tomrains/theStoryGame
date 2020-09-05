@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Link } from "react-router-dom";
+import { Button } from 'react-bootstrap';
 // import Button from 'react-bootstrap/Button';
 // import Form from 'react-bootstrap/Form';
 
@@ -119,12 +120,12 @@ class HomeScreen extends React.Component {
             {!this.props.playerName ||
               !this.props.playerAvatar ||
               !this.props.rounds ? (
-              <button disabled>Create Game</button>
+                <Button variant="success" disabled>Create Game</Button>
               ) : (
               <div>
-                <button onClick={this.createGame}>
-                  <Link to='/waitscreen'>Create Game</Link>
-                </button>
+                <Link to='/waitscreen'>
+                  <Button variant="success" onClick={this.createGame}>Create Game</Button>
+                </Link>
               </div>
               )
             }

@@ -5,6 +5,8 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
+import { Button } from 'react-bootstrap';
+
 import axios from 'axios';
 
 class Join extends React.Component {
@@ -121,12 +123,12 @@ class Join extends React.Component {
       </div>
 
       {!this.props.playerName || !this.props.playerAvatar ? (
-        <button disabled type="button" className="btn btn-success">Join Game</button>
+        <Button variant="success" disabled>Join Game</Button>
         ) : (
         <div>
-          <button onClick={this.putPlayer}>
-            <Link to='/waitscreen'>Join Game</Link>
-          </button>
+          <Link to='/waitscreen'>
+            <Button variant="success" onClick={this.putPlayer}>Join Game</Button>
+          </Link>
         </div>
         )
       }

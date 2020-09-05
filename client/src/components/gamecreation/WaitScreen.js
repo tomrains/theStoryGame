@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import "./waitscreen.css";
+import { Button } from 'react-bootstrap';
 // import Form from 'react-bootstrap/Form';
 // import Button from 'react-bootstrap/Button';
 // import Dropdown from 'react-bootstrap/Dropdown';
@@ -106,7 +107,7 @@ class WaitScreen extends React.Component {
             button if the copy command exists */
          document.queryCommandSupported('copy') &&
           <div>
-            <button onClick={this.copyToClipboard}>Copy</button>
+            <Button variant="warning" onClick={this.copyToClipboard}>Copy Link</Button>
             {this.state.copySuccess}
           </div>
         }
@@ -141,9 +142,9 @@ class WaitScreen extends React.Component {
       {this.state.gameStarted && !this.props.isHost ? (
         <div>
         <p>The host has started the game!</p>
-          <button>
-            <Link to='/writing'>Begin Writing</Link>
-          </button>
+          <Link to='/writing'>
+            <Button variant="success">Begin Writing</Button>
+          </Link>
         </div>
       ) : (
         <div>
@@ -152,9 +153,9 @@ class WaitScreen extends React.Component {
 
       {!this.state.gameStarted && this.props.isHost ? (
         <div>
-          <button onClick={this.props.startGame}>
-            <Link to='/writing'>Start Game for Everyone</Link>
-          </button>
+          <Link to='/writing'>
+            <Button variant="primary" onClick={this.props.startGame}>Start Game for Everyone</Button>
+          </Link>
         </div>
       ) : (
         <div>

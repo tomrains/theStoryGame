@@ -2,7 +2,10 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// import Button from 'react-bootstrap/Button';
+import { ProgressBar, Button } from 'react-bootstrap';
+import ModalHeader from "react-bootstrap/ModalHeader";
+// import Progress from 'semantic-ui-react';
+import HelpModal from './HelpModal.js'
 
 class Writingpaper extends React.Component {
   constructor(props) {
@@ -98,7 +101,8 @@ class Writingpaper extends React.Component {
   updateStory = (e) => {
     //put the story into state so submit button can send it on
     this.setState({ story: e.target.value });
-    this.setState({ charactersLeft: (this.state.charactersAllowed - e.target.value.length) })
+    this.setState({ charactersLeft: (this.state.charactersAllowed - e.target.value.length) });
+    this.setState({ charactersUsed: e.target.value.length })
   };
 
   //This function sends the writing to the backend
@@ -198,6 +202,7 @@ class Writingpaper extends React.Component {
                     defaultValue={this.state.nudgeText} />
                   </div>
                   <p>Characters remaining: {this.state.charactersLeft} </p>
+                  <p><ProgressBar now={this.state.charactersUsed} min="0" max="135" /></p>
                 </div>
               ) : (
                 <div>
@@ -219,9 +224,12 @@ class Writingpaper extends React.Component {
 
               {this.state.submitStory && !this.state.storySubmitted ? (
                 <p>
-                  <button>Confirm submission?</button>
-                  <button onClick={this.putWriting}>Yes</button>
-                  <button onClick={this.neverMind}>No</button>
+                  <Button variant="primary">Confirm submission?</Button>
+                  <p>
+                    <Button variant="success" onClick={this.putWriting}>Yes</Button>
+                    {' '}
+                    <Button variant="danger" onClick={this.neverMind}>No</Button>
+                  </p>
                 </p>
                 ) : (
                 <div>
@@ -232,7 +240,7 @@ class Writingpaper extends React.Component {
               {!this.state.storySubmitted &&
                 !this.state.submitStory &&
                 this.state.charactersLeft > 15 && !this.props.isLastRound ? (
-                <button disabled>Submit writing</button>
+                <Button variant="primary" disabled>Submit writing</Button>
                 ) : (
                 <div>
                 </div>
@@ -243,7 +251,7 @@ class Writingpaper extends React.Component {
                 !this.state.submitStory &&
                 this.state.charactersLeft <= 15) || (this.props.isLastRound && !this.state.storySubmitted &&
                   !this.state.submitStory) ? (
-                <button onClick={this.tryToSubmit}>Submit writing</button>
+                    <Button variant="primary" onClick={this.tryToSubmit}>Submit writing</Button>
                 ) : (
                 <div>
                 </div>
@@ -252,7 +260,7 @@ class Writingpaper extends React.Component {
 
               {this.props.isHost && this.state.endGame ? (
                 <p>
-                  <button>Are you sure you want to end the game for everyone?</button>
+                  <Button variant="danger">Are you sure you want to end the game for everyone?</Button>
                   <button>Yes</button>
                   <button>No</button>
                 </p>
@@ -274,15 +282,16 @@ class Writingpaper extends React.Component {
           <div>
             <p>Everyone's turned in their story.</p>
             <p>Reveal yours below.</p>
-            <button type="button"className="btn btn-success">
-              <Link to='/story'>Reveal My Story</Link>
-            </button>
+              <Link to='/story'>
+                <Button variant="success">Reveal My Story</Button>
+              </Link>
           </div>
         ) : (
           <div>
           </div>
         )
       }
+      <HelpModal />
         </div>
       )
     }
