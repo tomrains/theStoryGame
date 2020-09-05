@@ -18,7 +18,14 @@ function HelpModal() {
         <Modal.Header closeButton>
           <Modal.Title>Help Section</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Write until the progress bar is filled. Then, submit your story. You can't write more than 150 characters.</Modal.Body>
+        <Modal.Body>
+        <p>This is the Story Game.
+        Together, you and your friends will write hilarious stories.</p>
+        Write a few lines of a story, then send it on to a friend.
+        <p>The catch is that your friends will only be able to see the last few words of the story you've written.</p>
+        <p>Enter your name, select an avatar, and choose the number of rounds before starting.</p>
+        <p>If you're a beginner, start with 3 rounds.</p>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close

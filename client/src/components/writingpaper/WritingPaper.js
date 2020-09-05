@@ -3,9 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { ProgressBar, Button } from 'react-bootstrap';
-import ModalHeader from "react-bootstrap/ModalHeader";
 // import Progress from 'semantic-ui-react';
-import HelpModal from './HelpModal.js'
+import HelpModal from './HelpModal.js';
 
 class Writingpaper extends React.Component {
   constructor(props) {

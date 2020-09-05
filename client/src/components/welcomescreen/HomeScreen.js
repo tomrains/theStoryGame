@@ -2,10 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { Button } from 'react-bootstrap';
-// import Button from 'react-bootstrap/Button';
-// import Form from 'react-bootstrap/Form';
 
-// const instance = axios.create({baseURL: 'http://localhost:4000'})
+import HelpModal from './HelpModal.js'
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -131,6 +129,7 @@ class HomeScreen extends React.Component {
             }
 
           </form>
+          <HelpModal />
         </div>
       )
     }

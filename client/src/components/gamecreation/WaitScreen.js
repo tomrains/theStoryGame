@@ -98,7 +98,7 @@ class WaitScreen extends React.Component {
         <h1>The Waitroom</h1>
         <form>
           <div className="form-group" controlId="exampleForm.ControlTextarea1">
-            <h2>Invite your friends!</h2>
+            <h2>Send this invite link to friends!</h2>
             <textarea className="form-control" value={this.props.gameIdUrl} ref={(textarea) => this.textArea = textarea}/>
           </div>
         </form>
