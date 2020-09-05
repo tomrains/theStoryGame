@@ -84,6 +84,8 @@ class Join extends React.Component {
       else {
         //nothing
       }
+      let gameIdUrl = `secret-wildwood-99621.herokuapp.com/join/${gameId}`
+      this.props.updateGameIdUrl(gameIdUrl);
     }
     console.log(gameId);
     // Check server for game - need to add error functionality to this

@@ -27,8 +27,9 @@ const GameSchema = new mongoose.Schema({
         default: false
     },
     players: [Player],
+    storiesSubmitted: [],
     storiesReturned: [],
-    storiesSubmitted: []
+    storyTexts: []
 });
 
 module.exports = mongoose.model('game', GameSchema);

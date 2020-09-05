@@ -43,6 +43,7 @@ router.put('/:code/startGame', (req, res) => {
       console.log("player array of falses added")
     }
     game.storiesSubmitted = submissionArray;
+
     // Initialize returned array
     let returnLocation = game.storiesReturned;
     let returnArray = [];
@@ -56,9 +57,27 @@ router.put('/:code/startGame', (req, res) => {
       console.log("player array of falses added")
     }
     game.storiesReturned = returnArray;
+
+    // Initialize storyText array where stories will be stored
+    let draftsLocation = game.storyTexts;
+    let storiesArray = [];
+    for (let r = 0; r < rounds; r++) {
+      let storiesArray2 = [];
+      for (let s = 0; s < game.players.length; s++) {
+        storiesArray.push(false);
+        console.log("false added!");
+      }
+      storiesArray.push(storiesArray2);
+      console.log("story array of falses added")
+    }
+    game.storyTexts = returnArray;
+    game.markModified('storiesSubmitted');
+    game.markModified('storiesReturned');
+    game.markModified('storyTexts');
     game.save();
     console.log(game.storiesSubmitted);
     console.log(game.storiesReturned);
+    console.log(game.storyTexts);
     res.json(game);
   });
 });

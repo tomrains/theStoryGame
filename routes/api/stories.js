@@ -19,18 +19,18 @@ router.post('/write/:code', (req, res) => {
       return;
     }
     let playerNumber = req.body.playerNumber;
-    let storyLocation = game.players[playerNumber].story;
     let newLine = req.body.story;
     let round = req.body.round - 1;
     console.log(round);
-    storyLocation.push(newLine);
     console.log(`game.storiesSubmitted[round] is ${game.storiesSubmitted[round]}`);
     console.log(`we are replacing${game.storiesSubmitted[round][playerNumber]}`);
+    game.storyTexts[round][playerNumber] = newLine;
     game.storiesSubmitted[round][playerNumber] = true;
-    game.markModified('players');
+    game.markModified('storyTexts');
     game.markModified('storiesSubmitted');
     game.save();
     console.log(game.storiesSubmitted);
+    console.log(game.storyTexts[round][playerNumber]);
     res.json('Wow you did it!');
   });
 });
@@ -41,22 +41,58 @@ router.post('/write/:code', (req, res) => {
 router.get('/:code/:round/storiesSubmitted', (req, res) => {
   // let playerNumber = req.body.playerNumber;
   let code = req.params.code;
-  let round = parseInt(req.params.round) - 1;
+  // let round = parseInt(req.params.round) - 1;
   Game.find({code: code}, function(err, game) {
     console.log(game);
     let length = game[0].players.length;
+    let round = game[0].currentRound - 1;
     console.log(`the length of players is ${length}`);
     console.log(`the current round is ${round}`);
     //go through the round array and see if all are true;
+
+    //create array of the names of people who haven't finished.
+    //the locations of the players in storiesSubmitt for that round, and go through game.players.something for that to work?
+
+    //Set variable, but change if anyone not done
+    let allSubmitted = true;
+    let playersStillWorking = [];
     for (let i = 0; i < length; i++) {
       //search through the array for the round to see if all true
       if (game[0].storiesSubmitted[round][i] === false) {
       // if (game.storiesSubmitted[round][i] === false) {
-        res.json(false);
-        return;
+        allSubmitted = false;
+        playersStillWorking.push(game[0].players[i].name);
       }
     }
-    res.json(true);
+    if (allSubmitted === true) {
+      playersStillWorking = "Your new story is coming.";
+    }
+    else {
+      if (playersStillWorking.length === 2) {
+        playersStillWorking = "Just waiting on " + playersStillWorking[0] + " and " + playersStillWorking[1] + " to finish.";
+      }
+      else if (playersStillWorking.length > 2) {
+        let newArrayOfWorkers = "Just waiting on ";
+        for (let p = 0; p < playersStillWorking.length; p++) {
+          if ( p + 1 < playersStillWorking.length) {
+            newArrayOfWorkers = newArrayOfWorkers + playersStillWorking[p] + ", ";
+          }
+          else {
+            newArrayOfWorkers = newArrayOfWorkers + "and " + playersStillWorking[p] + " to finish."
+          }
+        }
+        playersStillWorking = newArrayOfWorkers;
+      }
+      else {
+        playersStillWorking = "Just waiting on " + playersStillWorking + " to finish."
+      }
+    }
+    console.log(`The playersStillWorking variable is ${playersStillWorking}`);
+    let storyInfo = {
+      everyoneHasSubmitted: allSubmitted,
+      playersStillWorking: playersStillWorking
+    }
+    res.json(storyInfo);
   });
 });
 
@@ -87,7 +123,7 @@ router.put('/:code/grabNewStory', (req, res) => {
       console.log(`storyNumber is ${storyNumber}`);
     }
     game.storiesReturned[round][playerNumber] = true;
-    let storyToSend = game.players[storyNumber].story[game.currentRound - 1];
+    let storyToSend = game.storyTexts[round][playerNumber];
     if (!storyToSend) {
       return;
     }
@@ -141,7 +177,7 @@ router.put('/:code/grabNewStory', (req, res) => {
 // @route   GET api/stories/:code/:playerId/finalStory
 // @desc    Player fetches final, completed story from backend
 // @check   Passed
-router.get('/:code/:playerId/finalStory', (req, res) => {
+router.put('/:code/:playerId/finalStory', (req, res) => {
   let code = req.params.code;
   let playerNumber = parseInt(req.params.playerId);
   Game.findOne({code: code}, function(err, game) {
@@ -150,11 +186,11 @@ router.get('/:code/:playerId/finalStory', (req, res) => {
     let rounds = game.rounds;
     let length = game.players.length;
     for (let i = 1; i <= rounds; i++) {
-      storyNeeded = (playerNumber - 1 + i) % length;
-      console.log(`storyNeeded is ${storyNeeded}`);
-      console.log(`game.players[storyNeeded] is ${game.players[storyNeeded]}`);
-      console.log(`game.players[storyNeeded].story[i - 1] is ${game.players[storyNeeded].story[i - 1]}`);
-      let storySpot = game.players[storyNeeded].story[i - 1];
+      // storyNeeded = (playerNumber - 1 + i) % length;
+      // console.log(`storyNeeded is ${storyNeeded}`);
+      // console.log(`game.storyTexts[i - 1][storyNeeded] is ${game.storyTexts[i - 1][storyNeeded]}`);
+      // console.log(`game.players[storyNeeded].story[i - 1] is ${game.players[storyNeeded].story[i - 1]}`);
+      let storySpot = game.storyTexts[i - 1][playerNumber];
       //add space to end of line
       if (storySpot[storySpot.length - 1] !== " " && i !== rounds) {
         storySpot = storySpot + " ";
@@ -170,6 +206,8 @@ router.get('/:code/:playerId/finalStory', (req, res) => {
       draft = draft + chainedStory[q];
     }
     console.log(`the draft is ${draft}`);
+    game.storiesReturned[rounds - 1][playerNumber] =  true;
+    game.markModified('storiesReturned');
     res.json(draft);
   });
 });

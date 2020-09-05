@@ -92,6 +92,7 @@ class WaitScreen extends React.Component {
     }
     return (
       <div>
+      {!this.state.gameStarted ? (
       <div className="first">
         <h1>The Waitroom</h1>
         <form>
@@ -123,18 +124,43 @@ class WaitScreen extends React.Component {
         ) : (
           <div>No one's joined yet </div>
         )}
-        {!this.state.gameStarted && !this.props.isHost ? (
-          <div>
-            Waiting for host to start game ...
-          </div>
-        ) : (
-          <div>
-            <button onClick={this.props.startGame}>
-              <Link to='/writing'>Start Game</Link>
-            </button>
-          </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div>
+        </div>
+      )}
+      {!this.state.gameStarted && !this.props.isHost ? (
+        <div>
+          Waiting for host to start game ...
+        </div>
+      ) : (
+        <div>
+        </div>
+      )}
+
+      {this.state.gameStarted && !this.props.isHost ? (
+        <div>
+        <p>The host has started the game!</p>
+          <button>
+            <Link to='/writing'>Begin Writing</Link>
+          </button>
+        </div>
+      ) : (
+        <div>
+        </div>
+      )}
+
+      {!this.state.gameStarted && this.props.isHost ? (
+        <div>
+          <button onClick={this.props.startGame}>
+            <Link to='/writing'>Start Game for Everyone</Link>
+          </button>
+        </div>
+      ) : (
+        <div>
+        </div>
+      )}
+
       </div>
     )
   }

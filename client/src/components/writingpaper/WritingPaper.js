@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+// import Button from 'react-bootstrap/Button';
 
 class Writingpaper extends React.Component {
   constructor(props) {
@@ -21,7 +22,9 @@ class Writingpaper extends React.Component {
       previousPersonsWriting: "Lemon, Ella and Nut played Dead by Daylight every day together, until",
       previousPerson: "[Name of Previous Person Here]",
       avatarOfPreviousPerson: "[Avatar of Previous Person Here]",
-      nudgeText: "Begin your story here"
+      nudgeText: "Begin your story here",
+      playersStillWorking: "Just waiting on everyone to finish.",
+      snarkyWaitingLine: " Penning a masterpiece, I'm sure."
     }
   }
 
@@ -38,6 +41,7 @@ class Writingpaper extends React.Component {
   }
 
   hasEveryoneSubmitted = () => {
+    // only enter this loop if you have submitted your story and you do NOT have your final story
     if (this.state.storySubmitted && !this.props.hasFinalStory) {
     // list what this should do
     let info1 = {
@@ -45,18 +49,25 @@ class Writingpaper extends React.Component {
     }
     console.log(`this.props.currentRound is ${this.props.currentRound}`);
     axios.get(`api/stories/${this.props.gameId}/${this.props.currentRound}/storiesSubmitted`, info1)
-      .then(res => this.setState({ everyoneHasSubmitted: res.data }));
+      .then(res => this.setState({
+        everyoneHasSubmitted: res.data.everyoneHasSubmitted,
+        playersStillWorking: res.data.playersStillWorking
+       }));
+
+      //if it's the last round and everyone's submitted, get your final story
     if (this.props.isLastRound && this.state.everyoneHasSubmitted) {
       let info2 = {
         code: this.props.gameId,
         playerNumber: this.props.playerNumber,
         round: this.props.currentRound
       }
-      axios.get(`api/stories/${this.props.gameId}/${this.props.playerNumber}/finalStory`, info2)
+      axios.put(`api/stories/${this.props.gameId}/${this.props.playerNumber}/finalStory`, info2)
         .then(res => this.props.updateFinalStory(res.data))
         .then(this.props.updateHasFinalStory())
         .then(this.setState({ storySubmitted: true })); //might not need this part due to logic in render. test?
     }
+
+    //if everyone has submitted and you don't have any writing and it's not the last round, go for story
     if (this.state.everyoneHasSubmitted && this.state.previousPersonsWriting === "Empty" && !this.props.isLastRound) {
       console.log("do the request for the story that is rightfully yours");
       let info3 = {
@@ -76,8 +87,9 @@ class Writingpaper extends React.Component {
           this.setState({ nudgeText: "Finish the story here" })
         }
         this.props.updateRoundNumber();
+      }
     }
-  }
+  // if you haven't submitted your story, or you have your final story, exit the loop
   else {
     return;
   }
@@ -138,11 +150,14 @@ class Writingpaper extends React.Component {
 
   render() {
     let waitText = "";
+    let snarkyWaitingLine = "";
     if (!this.props.finalStory) {
-      waitText = "Just waiting on everyone to finish."
+      waitText = `${this.state.playersStillWorking}`;
+      snarkyWaitingLine = `${this.state.snarkyWaitingLine}`;
     }
     else {
       waitText = null;
+      snarkyWaitingLine = null;
     }
 
     //variables, logic and so on here
@@ -204,7 +219,7 @@ class Writingpaper extends React.Component {
 
               {this.state.submitStory && !this.state.storySubmitted ? (
                 <p>
-                  <button>Are you sure you want to submit your story?</button>
+                  <button>Confirm submission?</button>
                   <button onClick={this.putWriting}>Yes</button>
                   <button onClick={this.neverMind}>No</button>
                 </p>
