@@ -21,9 +21,9 @@ class App extends Component {
       gameIndex: null,
       players: [],
       playerName: "",
-      playerAvatar: "Avatar1",
+      playerAvatar: "🤠",
       playerNumber: null,
-      rounds: null,
+      rounds: 3,
       currentRound: 1,
       doesGameIdExist: null,
       isHost: false,
@@ -68,8 +68,8 @@ class App extends Component {
     this.setState({ playerName: e.target.value });
   }
 
-  updateAvatar = (e) => {
-    this.setState({ playerAvatar: e.target.value })
+  updateAvatar = (avatar) => {
+    this.setState({ playerAvatar: avatar }) //changed this from e.target.value
   }
 
   updateFinalStory = (finalStory) => {

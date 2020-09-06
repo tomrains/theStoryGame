@@ -1,17 +1,20 @@
 import React from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Link } from "react-router-dom";
-import { Button } from 'react-bootstrap';
+// import { BrowserRouter as Router, Link } from "react-router-dom";
+import { Button, Form } from 'react-bootstrap';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import HelpModal from './HelpModal.js'
+import HelpModal from './HelpModal.js';
+import Avatars from './Avatars.js';
+// import JSEMOJI from 'emoji-js';
 
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       playerName: null,
-      playerAvatar: null,
-      rounds: null,
+      playerAvatar: "Avatar 1",
+      rounds: 3,
       gameIdUrl: null,
       test: null,
       playerSubmitted: false
@@ -70,7 +73,7 @@ class HomeScreen extends React.Component {
         code: this.props.gameId,
         rounds: this.props.rounds,
         players: {
-          name: this.props.playerName,
+          name: this.props.playerName + " " + this.props.playerAvatar,
           number: 0,
           avatar: this.props.playerAvatar,
         }
@@ -87,34 +90,30 @@ class HomeScreen extends React.Component {
   render() {
       return (
         <div>
-        <h1>Welcome to the Story Game! Ready to start a game with friends?</h1>
-          <form>
-            <div className="form-group">
-              <label>Name</label>
-              <input type="name" placeholder="Enter name" onChange={this.props.updateName} />
-            </div>
-
-            <div className="form-group">
-              <label>Select avatar</label>
-              <select multiple className="form-control" onClick={this.props.updateAvatar}>
-                <option>Avatar 1</option>
-                <option>Avatar 2</option>
-                <option>Avatar 3</option>
-                <option>Avatar 4</option>
-                <option>Avatar 5</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Number of rounds</label>
-              <select multiple className="form-control" onClick={this.props.hostSetsRoundNumber}>
-                <option>3</option>
-                <option>5</option>
-                <option>7</option>
-                <option>9</option>
-              </select>
-            </div>
-
+        <h1>The Story Game</h1>
+        <Form>
+          <Form.Group controlId="exampleForm.ControlInput1">
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="name" placeholder="Enter name" onChange={this.props.updateName}/>
+          </Form.Group>
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label>Select Avatar</Form.Label>
+            <Route path="/" render={(props) => (
+              <Avatars {...props}
+              updateAvatar = {this.props.updateAvatar} />
+            )}
+            />
+          </Form.Group>
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label>Number of Rounds</Form.Label>
+            <Form.Control as="select" onClick={this.props.hostSetsRoundNumber}>
+              <option>3</option>
+              <option>5</option>
+              <option>7</option>
+              <option>9</option>
+            </Form.Control>
+          </Form.Group>
+        </Form>
             {!this.props.playerName ||
               !this.props.playerAvatar ||
               !this.props.rounds ? (
@@ -127,9 +126,11 @@ class HomeScreen extends React.Component {
               </div>
               )
             }
-
-          </form>
-          <HelpModal />
+          <p>
+          </p>
+          <p>
+            <HelpModal />
+          </p>
         </div>
       )
     }

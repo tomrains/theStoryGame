@@ -1,11 +1,8 @@
 import React from 'react';
 
-// import Button from 'react-bootstrap/Button';
-// import Form from 'react-bootstrap/Form';
-
-import { Link } from 'react-router-dom';
-
-import { Button } from 'react-bootstrap';
+import Avatars from '../welcomescreen/Avatars.js';
+import { Button, Form } from 'react-bootstrap';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import axios from 'axios';
 
@@ -39,7 +36,7 @@ class Join extends React.Component {
     }
     // e.preventDefault();
     let player = {
-      name: this.props.playerName,
+      name: this.props.playerName + " " + this.props.playerAvatar,
       avatar: this.props.playerAvatar
     }
     console.log(player);
@@ -105,34 +102,45 @@ class Join extends React.Component {
   render() {
     return <div>
     <h2> About to join game {this.props.gameId} </h2>
-    <form>
-      <div className="form-group">
-        <label>Name</label>
-        <input placeholder="Enter name" onChange={this.props.updateName} />
-      </div>
 
-      <div className="form-group">
-        <label>Select avatar</label>
-        <select multiple className="form-control" onChange={this.props.updateAvatar}>
-          <option>Avatar 1</option>
-          <option>Avatar 2</option>
-          <option>Avatar 3</option>
-          <option>Avatar 4</option>
-          <option>Avatar 5</option>
-        </select>
-      </div>
+    <Form>
+      <Form.Group controlId="exampleForm.ControlInput1">
+        <Form.Label>Name</Form.Label>
+        <Form.Control type="name" placeholder="Enter name" onChange={this.props.updateName}/>
+      </Form.Group>
+      <Form.Group controlId="exampleForm.ControlSelect1">
+        <Form.Label>Select Avatar</Form.Label>
+        <Route path="/join" render={(props) => (
+          <Avatars {...props}
+          updateAvatar = {this.props.updateAvatar} />
+        )}
+        />
+      </Form.Group>
+      <Form.Group controlId="exampleForm.ControlSelect1">
+        <Form.Label>Number of Rounds</Form.Label>
+        <Form.Control as="select" onClick={this.props.hostSetsRoundNumber}>
+          <option>3</option>
+          <option>5</option>
+          <option>7</option>
+          <option>9</option>
+        </Form.Control>
+      </Form.Group>
+    </Form>
 
       {!this.props.playerName || !this.props.playerAvatar ? (
         <Button variant="success" disabled>Join Game</Button>
         ) : (
         <div>
           <Link to='/waitscreen'>
-            <Button variant="success" onClick={this.putPlayer}>Join Game</Button>
+            <Button
+              variant="success"
+              onClick={this.putPlayer}>
+              Join Game
+            </Button>
           </Link>
         </div>
         )
       }
-      </form>
     </div>;
   }
 }

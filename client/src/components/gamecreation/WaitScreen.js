@@ -95,10 +95,11 @@ class WaitScreen extends React.Component {
       <div>
       {!this.state.gameStarted ? (
       <div className="first">
-        <h1>The Waitroom</h1>
+        <h1>The Waiting Room</h1>
         <form>
           <div className="form-group" controlId="exampleForm.ControlTextarea1">
-            <h2>Send this invite link to friends!</h2>
+          <p></p>
+            <h4>Send this invite link to friends</h4>
             <textarea className="form-control" value={this.props.gameIdUrl} ref={(textarea) => this.textArea = textarea}/>
           </div>
         </form>
@@ -111,7 +112,7 @@ class WaitScreen extends React.Component {
             {this.state.copySuccess}
           </div>
         }
-        <h2>Who's Joined:</h2>
+        <p></p><h2>Who's Joined:</h2>
         {this.state.gameInfo !== "Default" && this.state.gameInfo !== null ? (
           <div>
             {playerBoard.map((item) => {
@@ -153,6 +154,7 @@ class WaitScreen extends React.Component {
 
       {!this.state.gameStarted && this.props.isHost ? (
         <div>
+        <p></p>
           <Link to='/writing'>
             <Button variant="primary" onClick={this.props.startGame}>Start Game for Everyone</Button>
           </Link>

@@ -123,7 +123,7 @@ router.put('/:code/grabNewStory', (req, res) => {
       console.log(`storyNumber is ${storyNumber}`);
     }
     game.storiesReturned[round][playerNumber] = true;
-    let storyToSend = game.storyTexts[round][playerNumber];
+    let storyToSend = game.storyTexts[round][storyNumber];
     if (!storyToSend) {
       return;
     }

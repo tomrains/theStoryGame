@@ -225,6 +225,8 @@ class Writingpaper extends React.Component {
                 <p>
                   <Button variant="primary">Confirm submission?</Button>
                   <p>
+                  </p>
+                  <p>
                     <Button variant="success" onClick={this.putWriting}>Yes</Button>
                     {' '}
                     <Button variant="danger" onClick={this.neverMind}>No</Button>
@@ -290,7 +292,15 @@ class Writingpaper extends React.Component {
           </div>
         )
       }
-      <HelpModal />
+      {!this.state.storySubmitted ? (
+        <div>
+        <p></p>
+        <HelpModal />
+        </div>
+      ) : (
+        <div>
+        </div>
+      )}
         </div>
       )
     }
