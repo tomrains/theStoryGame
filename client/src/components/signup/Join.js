@@ -116,15 +116,6 @@ class Join extends React.Component {
         )}
         />
       </Form.Group>
-      <Form.Group controlId="exampleForm.ControlSelect1">
-        <Form.Label>Number of Rounds</Form.Label>
-        <Form.Control as="select" onClick={this.props.hostSetsRoundNumber}>
-          <option>3</option>
-          <option>5</option>
-          <option>7</option>
-          <option>9</option>
-        </Form.Control>
-      </Form.Group>
     </Form>
 
       {!this.props.playerName || !this.props.playerAvatar ? (

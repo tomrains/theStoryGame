@@ -67,7 +67,7 @@ class HomeScreen extends React.Component {
     if (this.state.playerSubmitted) {
       return;
     }
-    e.preventDefault();
+    // e.preventDefault();
     this.props.updateHost();
     let newGameInfo = {
         code: this.props.gameId,
@@ -97,14 +97,6 @@ class HomeScreen extends React.Component {
             <Form.Control type="name" placeholder="Enter name" onChange={this.props.updateName}/>
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Label>Select Avatar</Form.Label>
-            <Route path="/" render={(props) => (
-              <Avatars {...props}
-              updateAvatar = {this.props.updateAvatar} />
-            )}
-            />
-          </Form.Group>
-          <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Label>Number of Rounds</Form.Label>
             <Form.Control as="select" onClick={this.props.hostSetsRoundNumber}>
               <option>3</option>
@@ -113,6 +105,16 @@ class HomeScreen extends React.Component {
               <option>9</option>
             </Form.Control>
           </Form.Group>
+
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label>Select Avatar</Form.Label>
+            <Route path="/" render={(props) => (
+              <Avatars {...props}
+              updateAvatar = {this.props.updateAvatar} />
+            )}
+            />
+          </Form.Group>
+          
         </Form>
             {!this.props.playerName ||
               !this.props.playerAvatar ||

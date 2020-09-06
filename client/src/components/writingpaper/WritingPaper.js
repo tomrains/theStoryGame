@@ -13,15 +13,18 @@ class Writingpaper extends React.Component {
       charactersAllowed: 150,
       charactersUsed: 0,
       charactersLeft: 150,
+      currentRound: 1,
       minimimumCharactersRequired: 135,
       story: "",
+      roundForAppUpdate: 1,
       submitStory: false,
       storySubmitted: false,
       endGame: false,
+      isLastRound: false,
       makeLastRound: false,
       needHelp: false,
       everyoneHasSubmitted: false,
-      previousPersonsWriting: "Lemon, Ella and Nut played Dead by Daylight every day together, until",
+      previousPersonsWriting: "Example",
       previousPerson: "[Name of Previous Person Here]",
       avatarOfPreviousPerson: "[Avatar of Previous Person Here]",
       nudgeText: "Begin your story here",
@@ -43,52 +46,59 @@ class Writingpaper extends React.Component {
   }
 
   hasEveryoneSubmitted = () => {
+    // this.props.updateRoundNumber(this.state.roundForAppUpdate);
+    //make a get request to fetch the current round and update it
     // only enter this loop if you have submitted your story and you do NOT have your final story
     if (this.state.storySubmitted && !this.props.hasFinalStory) {
     // list what this should do
     let info1 = {
-      round: this.props.currentRound
+      round: this.state.currentRound
     }
-    console.log(`this.props.currentRound is ${this.props.currentRound}`);
-    axios.get(`api/stories/${this.props.gameId}/${this.props.currentRound}/storiesSubmitted`, info1)
+    console.log(`this.state.currentRound is ${this.state.currentRound}`);
+    axios.get(`api/stories/${this.props.gameId}/${this.state.currentRound}/storiesSubmitted`, info1)
       .then(res => this.setState({
         everyoneHasSubmitted: res.data.everyoneHasSubmitted,
         playersStillWorking: res.data.playersStillWorking
        }));
 
       //if it's the last round and everyone's submitted, get your final story
-    if (this.props.isLastRound && this.state.everyoneHasSubmitted) {
+    if (this.state.isLastRound && this.state.everyoneHasSubmitted) {
       let info2 = {
         code: this.props.gameId,
         playerNumber: this.props.playerNumber,
-        round: this.props.currentRound
+        round: this.state.currentRound
       }
       axios.put(`api/stories/${this.props.gameId}/${this.props.playerNumber}/finalStory`, info2)
         .then(res => this.props.updateFinalStory(res.data))
         .then(this.props.updateHasFinalStory())
         .then(this.setState({ storySubmitted: true })); //might not need this part due to logic in render. test?
     }
-
+    axios.get(`api/stories/${this.props.gameId}/${this.state.currentRound}/storiesSubmitted`, info1)
+      .then(res => this.setState({
+        everyoneHasSubmitted: res.data.everyoneHasSubmitted,
+        playersStillWorking: res.data.playersStillWorking
+       }));
     //if everyone has submitted and you don't have any writing and it's not the last round, go for story
-    if (this.state.everyoneHasSubmitted && this.state.previousPersonsWriting === "Empty" && !this.props.isLastRound) {
+    if (this.state.everyoneHasSubmitted && this.state.previousPersonsWriting === "Example" && !this.state.isLastRound) {
       console.log("do the request for the story that is rightfully yours");
       let info3 = {
         code: this.props.gameId,
         playerNumber: this.props.playerNumber,
-        round: this.props.currentRound
+        round: this.state.currentRound
       }
       axios.put(`api/stories/${this.props.gameId}/grabNewStory`, info3)
         .then(res => this.setState({
-          previousPersonsWriting: res.data.story,
+          previousPersonsWriting: res.data.story, //only change stuff below IF this is equal to something?
           previousPerson: res.data.player,
-          avatarOfPreviousPerson: res.data.avatar,
           storySubmitted: false,
-          everyoneHasSubmitted: false
-        }));
-        if (this.props.rounds - this.props.currentRound === 1) {
+          everyoneHasSubmitted: false,
+          currentRound: res.data.round + 1,
+          isLastRound: res.data.isLastRound
+        })
+      );
+        if (this.props.rounds - this.state.currentRound === 0) { //not sure why this is 1 instead of 0...
           this.setState({ nudgeText: "Finish the story here" })
         }
-        this.props.updateRoundNumber();
       }
     }
   // if you haven't submitted your story, or you have your final story, exit the loop
@@ -107,13 +117,14 @@ class Writingpaper extends React.Component {
   //This function sends the writing to the backend
   //First, we'll try to send it to that player. Eventually, it will go to the player who originally wrote it
   putWriting = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
+    this.setState({ playersStillWorking: "Just waiting on everyone to finish." });
     console.log("and here we are");
     let playerStory = {
       code: this.props.gameId,
       playerNumber: this.props.playerNumber,
       story: this.state.story,
-      round: this.props.currentRound
+      round: this.state.currentRound
     }
     axios.post(`api/stories/write/${this.props.gameId}`, playerStory)
       .then(this.setState({
@@ -121,7 +132,7 @@ class Writingpaper extends React.Component {
         charactersLeft: 150,
         story: "Write your story here",
         storySubmitted: true,
-        previousPersonsWriting: "Empty",
+        previousPersonsWriting: "Example",
         submitStory: false,
         nudgeText: "Continue the story here"
        }));
@@ -131,6 +142,7 @@ class Writingpaper extends React.Component {
     if (e.target.value === "Begin your story here" || e.target.value === "Continue the story here" || e.target.value === "Finish the story here") {
       e.target.value = "";
     }
+    this.setState({ everyoneHasSubmitted: false });
   }
 
   tryToSubmit = (e) => {
@@ -179,19 +191,19 @@ class Writingpaper extends React.Component {
           {!this.state.storySubmitted && !this.props.hasFinalStory ? (
           <div>
           <h1>Your Story</h1>
-            <p>Round {this.props.currentRound} of {this.props.rounds}</p>
-            {this.props.currentRound === 1 ? (
+            <p>Round {this.state.currentRound} of {this.props.rounds}</p>
+            {this.state.previousPersonsWriting === "Example" ? (
               <div>
               </div>
             ) : (
               <div>
-                This is what {this.state.previousPerson} {this.state.avatarOfPreviousPerson} wrote for you:
+                This is what {this.state.previousPerson} wrote for you:
                 <div>{lastLine}</div>
               </div>
             )}
             <form>
 
-              {this.props.isLastRound === false ? (
+              {this.state.isLastRound === false ? (
                 <div>
                   <div className="form-group">
                     <label></label>
@@ -240,7 +252,7 @@ class Writingpaper extends React.Component {
 
               {!this.state.storySubmitted &&
                 !this.state.submitStory &&
-                this.state.charactersLeft > 15 && !this.props.isLastRound ? (
+                this.state.charactersLeft > 15 && !this.state.isLastRound ? (
                 <Button variant="primary" disabled>Submit writing</Button>
                 ) : (
                 <div>
@@ -250,7 +262,7 @@ class Writingpaper extends React.Component {
 
               {(!this.state.storySubmitted &&
                 !this.state.submitStory &&
-                this.state.charactersLeft <= 15) || (this.props.isLastRound && !this.state.storySubmitted &&
+                this.state.charactersLeft <= 15) || (this.state.isLastRound && !this.state.storySubmitted &&
                   !this.state.submitStory) ? (
                     <Button variant="primary" onClick={this.tryToSubmit}>Submit writing</Button>
                 ) : (
@@ -310,21 +322,6 @@ class Writingpaper extends React.Component {
 export default Writingpaper;
 
 
-// <CharacterCountLimit />
-// <ConfirmDoneWriting />
-// <ConfirmTheEnd />
-// <DoneWritingButton />
-// <GameMasterConfirmEndGame />
-// <GameMasterConfirmLastRound />
-// <GameMasterEndGame />
-// <GameMasterMakeLastRound />
-// <Help />
-// <LastRoundNotification />
-// <PreviousLastLine />
-// <RoundNumber />
-// <ThanksForWritingNowWait />
-// <TheEndButton />
-// <ThreeNewLines />
 
 /*{this.props.isHost ? (
   <div>

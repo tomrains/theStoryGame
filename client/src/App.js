@@ -24,10 +24,8 @@ class App extends Component {
       playerAvatar: "🤠",
       playerNumber: null,
       rounds: 3,
-      currentRound: 1,
       doesGameIdExist: null,
       isHost: false,
-      isLastRound: false,
       finalStory: null,
       hasFinalStory: false
     }
@@ -45,12 +43,12 @@ class App extends Component {
     this.setState({ isHost: true })
   }
 
-  updateRoundNumber = () => {
-    if (this.state.rounds - this.state.currentRound === 1) {
-      this.setState({ isLastRound: true})
-    }
-    this.setState({ currentRound: this.state.currentRound + 1 })
-  }
+  // updateRoundNumber = (number) => {
+  //   if (this.state.rounds - this.state.currentRound === 0) { //changed this from 1 to 0
+  //     this.setState({ isLastRound: true})
+  //   }
+  //   this.setState({ currentRound: number })
+  // }
 
   updatePlayerNumber = (playerNumber) => {
     this.setState({ playerNumber: playerNumber })
@@ -160,12 +158,10 @@ class App extends Component {
           />
           <Route path="/writing" render={(props) => (
             <WritingPaper {...props}
-            currentRound={this.state.currentRound}
             isHost={this.state.isHost}
             updateRoundNumber={this.updateRoundNumber}
             playerNumber = {this.state.playerNumber}
             gameId = {this.state.gameId}
-            isLastRound = {this.state.isLastRound}
             rounds = {this.state.rounds}
             finalStory = {this.state.finalStory}
             updateFinalStory = {this.updateFinalStory}

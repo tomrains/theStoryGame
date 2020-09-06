@@ -31,20 +31,20 @@ class WaitScreen extends React.Component {
   //   this.setState ({ rounds: e.target.value })
   // }
 
-//   copy = (e) => {
-//   /* Get the text field */
-//   let copyText = e.target.value;
-//
-//   /* Select the text field */
-//   copyText.select();
-//   copyText.setSelectionRange(0, 99999); /*For mobile devices*/
-//
-//   /* Copy the text inside the text field */
-//   document.execCommand("copy");
-//
-//   /* Alert the copied text */
-//   alert("Copied the text: " + copyText.value);
-// }
+  copy = (e) => {
+  /* Get the text field */
+  let copyText = e.target.value;
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  alert("Copied the text: " + copyText.value);
+}
 
   componentWillUnmount() {
     clearInterval(this.intervalID);
@@ -67,7 +67,7 @@ class WaitScreen extends React.Component {
   }
 
   beginGame = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log("begin game functionality will go here");
     //do a put request to server to begin game
     let gameStatus = {
