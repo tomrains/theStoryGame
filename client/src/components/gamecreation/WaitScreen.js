@@ -8,13 +8,16 @@ import { Button } from 'react-bootstrap';
 // import Dropdown from 'react-bootstrap/Dropdown';
 // import DropdownButton from 'react-bootstrap/DropdownButton';
 
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 class WaitScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       gameInfo: "Default",
       gameStarted: false,
-      copySuccess: ''
+      copySuccess: '',
+      copied: false
     }
   }
 
@@ -31,19 +34,26 @@ class WaitScreen extends React.Component {
   //   this.setState ({ rounds: e.target.value })
   // }
 
-  copy = (e) => {
-  /* Get the text field */
-  let copyText = e.target.value;
+//   copy = (e) => {
+//   /* Get the text field */
+//   let copyText = this.props.gameIdUrl;
+//   // console.log(e.target.value);
+//   /* Select the text field */
+//   // console.log(copyText);
+//   copyText[0].select();
+//   copyText.setSelectionRange(0, 99999); /*For mobile devices*/
 
-  /* Select the text field */
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+//   /* Copy the text inside the text field */
+//   document.execCommand("copy");
 
-  /* Copy the text inside the text field */
-  document.execCommand("copy");
+//   /* Alert the copied text */
+//   alert("Copied the text: " + copyText.value);
+// }
 
-  /* Alert the copied text */
-  alert("Copied the text: " + copyText.value);
+copyCodeToClipboard = () => {
+  const el = this.textArea
+  el.select()
+  document.execCommand("copy")
 }
 
   componentWillUnmount() {
@@ -76,14 +86,21 @@ class WaitScreen extends React.Component {
     axios.put(`api/games/${this.props.gameId}/startGame`, gameStatus)
   }
 
-  copyToClipboard = (e) => {
-  this.textArea.select();
-  document.execCommand('copy');
-  // This is just personal preference.
-  // I prefer to not show the whole text area selected.
-  e.target.focus();
-  this.setState({ copySuccess: ' Copied!' });
-};
+//   copyToClipboard = (e) => {
+//   this.textArea.select();
+//   document.execCommand('copy');
+//   // This is just personal preference.
+//   // I prefer to not show the whole text area selected.
+//   e.target.focus();
+//   this.setState({ copySuccess: ' Copied!' });
+// };
+
+// copyCodeToClipboard = () => {
+//   const el = this.textArea
+//   el.select()
+//   document.execCommand("copy")
+//   this.setState({copySuccess: true})
+// }
 
   render() {
     let players = this.state.gameInfo;
@@ -108,10 +125,14 @@ class WaitScreen extends React.Component {
             button if the copy command exists */
          document.queryCommandSupported('copy') &&
           <div>
-            <Button variant="warning" onClick={this.copyToClipboard}>Copy Link</Button>
+            <Button variant="warning" onClick={() => {navigator.clipboard.writeText(this.props.gameIdUrl)}}>Copy Link</Button>
             {this.state.copySuccess}
           </div>
         }
+        <CopyToClipboard text={this.props.gameIdUrl}
+          onCopy={() => this.setState({copied: true})}>
+          <span>Copy to clipboard with span</span>
+        </CopyToClipboard>
         <p></p><h2>Who's Joined:</h2>
         {this.state.gameInfo !== "Default" && this.state.gameInfo !== null ? (
           <div>

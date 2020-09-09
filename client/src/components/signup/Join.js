@@ -13,7 +13,7 @@ class Join extends React.Component {
       code: null,
       playerName: null,
       playerAvatar: null,
-      playerSubmitted: false,
+      playerSubmitted: false
     }
   }
 
