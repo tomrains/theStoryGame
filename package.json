@@ -2,7 +2,7 @@
   "name": "story_game_heroku",
   "version": "1.0.0",
   "description": "Fun game for friends to create hilarious stories together",
-  "main": "server.js",
+  "main": "server",
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
@@ -28,6 +28,7 @@
     "react-dom": "^16.8.0",
     "react-hooks": "^1.0.1",
     "react-icons": "^3.11.0",
+    "react-simple-storage": "^1.4.2",
     "request": "^2.88.2",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^1.2.1"

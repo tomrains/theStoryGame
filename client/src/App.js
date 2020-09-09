@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import SimpleStorage from "react-simple-storage";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 // import "./App.css";
@@ -59,7 +60,8 @@ class App extends Component {
   }
 
   hostSetsRoundNumber = (e) => {
-    this.setState({ rounds: e.target.value })
+    this.setState({ rounds: e.target.value });
+    console.log("howdy");
   }
 
   updateName = (e) => {
@@ -92,6 +94,7 @@ class App extends Component {
     return (
       <Router>
         <div className="container">
+          <SimpleStorage parent={this} />
           <br/>
           <Route
             path="/waitscreen"
