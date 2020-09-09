@@ -120,19 +120,14 @@ copyCodeToClipboard = () => {
             <textarea className="form-control" value={this.props.gameIdUrl} ref={(textarea) => this.textArea = textarea}/>
           </div>
         </form>
-        {
-         /* Logical shortcut for only displaying the
-            button if the copy command exists */
-         document.queryCommandSupported('copy') &&
-          <div>
-            <Button variant="warning" onClick={() => {navigator.clipboard.writeText(this.props.gameIdUrl)}}>Copy Link</Button>
-            {this.state.copySuccess}
-          </div>
-        }
+        
         <CopyToClipboard text={this.props.gameIdUrl}
-          onCopy={() => this.setState({copied: true})}>
-          <span>Copy to clipboard with span</span>
+          onCopy={() => this.setState({copied: true, copySuccess: "Link copied!"})}>
+          <Button variant="warning">Copy link</Button>
         </CopyToClipboard>
+        <p>
+        </p>{this.state.copySuccess}
+
         <p></p><h2>Who's Joined:</h2>
         {this.state.gameInfo !== "Default" && this.state.gameInfo !== null ? (
           <div>
