@@ -37,8 +37,19 @@ router.put('/:code', (req, res) => {
     playerNumber = game.players.length;
     game.players.push(req.body);
     game.players[playerNumber].number = playerNumber;
+    if (game.gameStarted === true) {
+      //tell it they cant join
+      let info = {
+        playerNumber: false
+      }
+      res.json(info);
+      return;
+    }
     game.save();
-    res.json(game.players[playerNumber].number);
+    let info = {
+      playerNumber: game.players[playerNumber].number
+    }
+    res.json(info);
   });
 });
 

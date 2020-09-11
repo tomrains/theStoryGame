@@ -179,11 +179,16 @@ class Writingpaper extends React.Component {
     let lastLine;
     let previousPersonsWriting = this.state.previousPersonsWriting;
     let length = previousPersonsWriting.length;
+    let spaceCounter = 0;
     for (let i = length - 50; i > 0 ; i--) {
       if (previousPersonsWriting[i] === " ") {
+        spaceCounter = spaceCounter + 1;
         lastLine = "..." + previousPersonsWriting.slice(i + 1, length);
         i = 0;
       }
+    }
+    if (spaceCounter === 0) {
+      lastLine = previousPersonsWriting.slice(length - 50, length);
     }
       return (
         //the organization here is wrong, but the components are there
@@ -235,7 +240,7 @@ class Writingpaper extends React.Component {
 
               {this.state.submitStory && !this.state.storySubmitted ? (
                 <p>
-                  <Button variant="primary">Confirm submission?</Button>
+                  Confirm submission?
                   <p>
                   </p>
                   <p>
@@ -291,7 +296,7 @@ class Writingpaper extends React.Component {
           )
         }
 
-        {this.props.finalStory ? (
+        {this.props.hasFinalStory ? (
           <div>
             <p>Everyone's turned in their story.</p>
             <p>Reveal yours below.</p>
@@ -304,7 +309,7 @@ class Writingpaper extends React.Component {
           </div>
         )
       }
-      {!this.state.storySubmitted ? (
+      {!this.state.storySubmitted && !this.props.hasFinalStory? (
         <div>
         <p></p>
         <HelpModal />

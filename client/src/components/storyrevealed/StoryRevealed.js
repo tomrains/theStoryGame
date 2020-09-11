@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
+import { Button } from 'react-bootstrap';
+
 import "./storyrevealed.css";
 
 // import FullStory from './subcomponents/FullStory.js';
@@ -11,11 +13,15 @@ import "./storyrevealed.css";
 
 // import Button from 'react-bootstrap/Button';
 
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 class Storyrevealed extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = { 
       //state here
+      copySuccess: '',
+      copied: false
     }
   }
 
@@ -25,16 +31,14 @@ class Storyrevealed extends React.Component {
         <div>
           <h1>{this.props.playerName}'s Story</h1>
           <p>{this.props.finalStory}</p>
-          {this.props.isHost ? (
-            <button class="btn btn-success">
-              <Link to='/'>Start New Game</Link>
-            </button>
-          ) : (
-            <div>
-            </div>
-          )}
-          <button class="btn btn-danger">
-            <Link to='/writing'>Hide My Story</Link>
+          <CopyToClipboard text={this.props.finalStory}
+            onCopy={() => this.setState({copied: true, copySuccess: "Story copied!"})}>
+            <Button variant="warning">Copy story</Button>
+          </CopyToClipboard>
+        <p>
+        </p>{this.state.copySuccess}
+          <button class="btn btn-success">
+            <Link to='/'>Play Again</Link>
           </button>
         </div>
       )

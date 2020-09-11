@@ -13,6 +13,7 @@ router.get('/', (req, res) => res.send('Game route'));
 // @check   Passed
 router.post('/add', (req, res) => {
   let game = new Game(req.body);
+  // Add in functionality to not create an existing game
   game.save()
     .then(game => {
       res.status(200).json({'game': 'game added successfully'});

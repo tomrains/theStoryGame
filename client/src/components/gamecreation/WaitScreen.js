@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import "./waitscreen.css";
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 // import Form from 'react-bootstrap/Form';
 // import Button from 'react-bootstrap/Button';
 // import Dropdown from 'react-bootstrap/Dropdown';
@@ -110,73 +110,89 @@ copyCodeToClipboard = () => {
     }
     return (
       <div>
-      {!this.state.gameStarted ? (
-      <div className="first">
-        <h1>The Waiting Room</h1>
-        <form>
-          <div className="form-group" controlId="exampleForm.ControlTextarea1">
-          <p></p>
-            <h4>Send this invite link to friends</h4>
-            <textarea className="form-control" value={this.props.gameIdUrl} ref={(textarea) => this.textArea = textarea}/>
-          </div>
-        </form>
-        
-        <CopyToClipboard text={this.props.gameIdUrl}
-          onCopy={() => this.setState({copied: true, copySuccess: "Link copied!"})}>
-          <Button variant="warning">Copy link</Button>
-        </CopyToClipboard>
-        <p>
-        </p>{this.state.copySuccess}
-
-        <p></p><h2>Who's Joined:</h2>
-        {this.state.gameInfo !== "Default" && this.state.gameInfo !== null ? (
+      
+      {this.props.playerNumber === false ? (
+        <div>
+          It looks like the game you're trying to join has already started.
           <div>
-            {playerBoard.map((item) => {
-              return(
-                <div>
-                  {item}
-                </div>
-              )
-            })}
+            <button class="btn btn-success">
+              <Link to='/'>Go Home</Link>
+            </button>
           </div>
-        ) : (
-          <div>No one's joined yet </div>
-        )}
         </div>
       ) : (
         <div>
-        </div>
-      )}
-      {!this.state.gameStarted && !this.props.isHost ? (
-        <div>
-          Waiting for host to start game ...
-        </div>
-      ) : (
-        <div>
-        </div>
-      )}
-
-      {this.state.gameStarted && !this.props.isHost ? (
-        <div>
-        <p>The host has started the game!</p>
-          <Link to='/writing'>
-            <Button variant="success">Begin Writing</Button>
-          </Link>
-        </div>
-      ) : (
-        <div>
-        </div>
-      )}
-
-      {!this.state.gameStarted && this.props.isHost ? (
-        <div>
-        <p></p>
-          <Link to='/writing'>
-            <Button variant="primary" onClick={this.props.startGame}>Start Game for Everyone</Button>
-          </Link>
-        </div>
-      ) : (
-        <div>
+        {!this.state.gameStarted ? (
+          <div className="first">
+            <h1>The Waiting Room</h1>
+    
+            <form>
+              <div className="form-group" controlId="exampleForm.ControlTextarea1">
+                <p></p>
+                  <h4>Send this invite link to friends</h4>
+                  <textarea className="form-control" value={this.props.gameIdUrl} ref={(textarea) => this.textArea = textarea}/>
+              </div>
+            </form>
+            
+            <CopyToClipboard text={this.props.gameIdUrl}
+              onCopy={() => this.setState({copied: true, copySuccess: "Link copied!"})}>
+              <Button variant="warning">Copy link</Button>
+            </CopyToClipboard>
+            <p>
+            </p>{this.state.copySuccess}
+    
+            <p></p><h2>Who's Joined:</h2>
+            {this.state.gameInfo !== "Default" && this.state.gameInfo !== null ? (
+              <div>
+                {playerBoard.map((item) => {
+                  return(
+                    <div>
+                      {item}
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div>No one's joined yet </div>
+            )}
+            </div>
+          ) : (
+            <div>
+            </div>
+          )}
+    
+          {!this.state.gameStarted && !this.props.isHost ? (
+            <div>
+              Waiting for host to start game ...
+            </div>
+          ) : (
+            <div>
+            </div>
+          )}
+    
+          {this.state.gameStarted && !this.props.isHost ? (
+            <div>
+            <p>The host has started the game!</p>
+              <Link to='/writing'>
+                <Button variant="success">Begin Writing</Button>
+              </Link>
+            </div>
+          ) : (
+            <div>
+            </div>
+          )}
+    
+          {!this.state.gameStarted && this.props.isHost ? (
+            <div>
+            <p></p>
+              <Link to='/writing'>
+                <Button variant="primary" onClick={this.props.startGame}>Start Game for Everyone</Button>
+              </Link>
+            </div>
+          ) : (
+            <div>
+            </div>
+          )}
         </div>
       )}
 

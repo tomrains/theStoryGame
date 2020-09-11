@@ -42,7 +42,7 @@ class Join extends React.Component {
     console.log(player);
     console.log(`the gameid in putPlayer is: ${this.props.gameId}`);
     axios.put(`api/players/${this.props.gameId}`, player)
-    .then(playerNumber => this.props.updatePlayerNumber(playerNumber.data))
+    .then(res => this.props.updatePlayerNumber(res.data.playerNumber))
     .then(this.setState({ playerSubmitted: true }));
 
 
@@ -83,9 +83,12 @@ class Join extends React.Component {
       else {
         //nothing
       }
-      let gameIdUrl = `secret-wildwood-99621.herokuapp.com/join/${gameId}`
-      this.props.updateGameIdUrl(gameIdUrl);
     }
+    if (gameId.length > 4) {
+      gameId = gameId.slice(0, 4);
+    }
+    let gameIdUrl = `secret-wildwood-99621.herokuapp.com/join/${gameId}`;
+    this.props.updateGameIdUrl(gameIdUrl);
     console.log(gameId);
     // Check server for game - need to add error functionality to this
     axios.get(`api/${gameId}`)
