@@ -73,6 +73,7 @@ copyCodeToClipboard = () => {
           gameStarted: game.data[0].gameStarted
         }));
         console.log(this.state.gameInfo);
+        this.props.updateAllPlayers(this.state.gameInfo);
     }
   }
 

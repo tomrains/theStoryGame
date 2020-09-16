@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Avatars from '../welcomescreen/Avatars.js';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Alert } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import axios from 'axios';
@@ -13,7 +13,8 @@ class Join extends React.Component {
       code: null,
       playerName: null,
       playerAvatar: null,
-      playerSubmitted: false
+      playerSubmitted: false,
+      gameHasStarted: null
     }
   }
 
@@ -29,6 +30,30 @@ class Join extends React.Component {
   //   this.setState({ gameCode: e.target.value });
   // }
 
+  // putPlayer = (e) => {
+  //   //don't submit information twice
+  //   if (this.state.playerSubmitted) {
+  //     return;
+  //   }
+  //   // e.preventDefault();
+  //   let player = {
+  //     name: this.props.playerName + " " + this.props.playerAvatar,
+  //     avatar: this.props.playerAvatar
+  //   }
+  //   console.log(player);
+  //   console.log(`the gameid in putPlayer is: ${this.props.gameId}`);
+  //   axios.put(`api/players/${this.props.gameId}`, player)
+  //   .then(res => this.props.updatePlayerNumber(res.data.playerNumber))
+  //   .then(this.setState({ playerSubmitted: true }));
+
+
+
+  // //   .then(console.log("we found the game!"));
+  // // this.props.updatePlayerNumber(playerNumber);
+
+  //   // Add in something that takes the student number and puts it into the players state
+  // }
+
   putPlayer = (e) => {
     //don't submit information twice
     if (this.state.playerSubmitted) {
@@ -42,18 +67,24 @@ class Join extends React.Component {
     console.log(player);
     console.log(`the gameid in putPlayer is: ${this.props.gameId}`);
     axios.put(`api/players/${this.props.gameId}`, player)
-    .then(res => this.props.updatePlayerNumber(res.data.playerNumber))
-    .then(this.setState({ playerSubmitted: true }));
-
-
-
-  //   .then(console.log("we found the game!"));
-  // this.props.updatePlayerNumber(playerNumber);
-
-    // Add in something that takes the student number and puts it into the players state
+    .then((res) => {
+      this.props.updatePlayerNumber(res.data.playerNumber);
+      this.props.updatePlayerId(res.data.playerId);
+    });
   }
 
+  // updatePlayerNumber = () => {
+  //   console.log("hey");
+  // }
+
+  // updatePlayerId = () => {
+  //   console.log("hey again");
+  // }
+
   getCodeFromURL = () => {
+    if (this.props.gameId !== "" && this.props.gameId !== null) { //recently added lines of code
+      return;
+    }
     const URL = window.location.href;
     const lengthOfURL = URL.length;
     let gameId = "";
@@ -94,7 +125,10 @@ class Join extends React.Component {
     axios.get(`api/${gameId}`)
       //this should have an if statement. how do we do those?
       // .then(res => console.log((res.data[0].rounds)));
-      .then(res => this.props.howManyRounds(res.data[0].rounds));
+      .then((res) => {
+        this.props.howManyRounds(res.data[0].rounds);
+        this.hasGameStarted(res.data[0].gameStarted);
+      });
     this.props.updateGameId(gameId);
   }
 
@@ -102,9 +136,32 @@ class Join extends React.Component {
     this.getCodeFromURL();
   }
 
+  hasGameStarted = (hasStarted) => {
+    if (hasStarted === true) {
+      this.setState({ gameHasStarted: true });
+    }
+  }
+
   render() {
     return <div>
-    <h2> About to join game {this.props.gameId} </h2>
+
+    {this.state.gameHasStarted ? (
+        <div>
+          Oops! It looks like this game has already started.
+          <p>
+            <Link to='/'>
+              <Button
+                variant="success">
+                Return Home
+              </Button>
+            </Link>
+          </p>
+        </div>
+    ) : (
+
+      <div>
+
+      <h2> About to join game {this.props.gameId} </h2>
 
     <Form>
       <Form.Group controlId="exampleForm.ControlInput1">
@@ -121,6 +178,18 @@ class Join extends React.Component {
       </Form.Group>
     </Form>
 
+    
+
+    {this.props.playerChoseAvatar ? (
+    <Alert variant="primary" transition="fade">
+      {this.props.playerAvatar} selected
+    </Alert>
+    ) : (
+      <div>
+      </div>
+    )}
+
+
       {!this.props.playerName || !this.props.playerAvatar ? (
         <Button variant="success" disabled>Join Game</Button>
         ) : (
@@ -135,7 +204,20 @@ class Join extends React.Component {
         </div>
         )
       }
+      </div>
+
+
+
+
+
+    )
+  
+  }
     </div>;
+
+
+
+
   }
 }
 

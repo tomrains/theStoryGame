@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ProgressBar, Button } from 'react-bootstrap';
 // import Progress from 'semantic-ui-react';
 import HelpModal from './HelpModal.js';
+import RemovePlayerModal from './RemovePlayerModal.js';
 
 class Writingpaper extends React.Component {
   constructor(props) {
@@ -29,13 +30,16 @@ class Writingpaper extends React.Component {
       avatarOfPreviousPerson: "[Avatar of Previous Person Here]",
       nudgeText: "Begin your story here",
       playersStillWorking: "Just waiting on everyone to finish.",
-      snarkyWaitingLine: " Penning a masterpiece, I'm sure."
+      snarkyWaitingLine: " Penning a masterpiece, I'm sure.",
+      newPlayerNumber: null
+      // showRemovePlayerModal: false
     }
   }
 
   intervalID;
 
   componentDidMount() {
+    this.getPlayers();
     this.hasEveryoneSubmitted();
     // pausing for now so it stops fetching lol
     this.intervalID = setInterval(this.hasEveryoneSubmitted.bind(this), 3000);
@@ -45,6 +49,12 @@ class Writingpaper extends React.Component {
     clearInterval(this.intervalID);
   }
 
+  getPlayers = () => {
+    console.log(this.props.gameId);
+    axios.get(`api/players/${this.props.gameId}/player`)
+      .then(game => this.props.updateAllPlayers(game.data[0].players)); 
+  }
+
   hasEveryoneSubmitted = () => {
     // this.props.updateRoundNumber(this.state.roundForAppUpdate);
     //make a get request to fetch the current round and update it
@@ -52,10 +62,10 @@ class Writingpaper extends React.Component {
     if (this.state.storySubmitted && !this.props.hasFinalStory) {
     // list what this should do
     let info1 = {
-      round: this.state.currentRound
+      round: this.state.currentRound,
     }
     console.log(`this.state.currentRound is ${this.state.currentRound}`);
-    axios.get(`api/stories/${this.props.gameId}/${this.state.currentRound}/storiesSubmitted`, info1)
+    axios.get(`api/stories/${this.props.gameId}/${this.state.currentRound}/${this.props.gameId}/storiesSubmitted`, info1)
       .then(res => this.setState({
         everyoneHasSubmitted: res.data.everyoneHasSubmitted,
         playersStillWorking: res.data.playersStillWorking
@@ -76,15 +86,20 @@ class Writingpaper extends React.Component {
     axios.get(`api/stories/${this.props.gameId}/${this.state.currentRound}/storiesSubmitted`, info1)
       .then(res => this.setState({
         everyoneHasSubmitted: res.data.everyoneHasSubmitted,
-        playersStillWorking: res.data.playersStillWorking
+        playersStillWorking: res.data.playersStillWorking,
+        newPlayerNumber: res.data.newNumber
        }));
+       if (this.state.newPlayerNumber !== null) {
+         this.props.updatePlayerNumber(this.state.newPlayerNumber);
+       }
     //if everyone has submitted and you don't have any writing and it's not the last round, go for story
     if (this.state.everyoneHasSubmitted && this.state.previousPersonsWriting === "Example" && !this.state.isLastRound) {
       console.log("do the request for the story that is rightfully yours");
       let info3 = {
         code: this.props.gameId,
         playerNumber: this.props.playerNumber,
-        round: this.state.currentRound
+        round: this.state.currentRound,
+        newPlayerNumber: this.state.newPlayerNumber
       }
       axios.put(`api/stories/${this.props.gameId}/grabNewStory`, info3)
         .then(res => this.setState({
@@ -96,7 +111,8 @@ class Writingpaper extends React.Component {
           isLastRound: res.data.isLastRound
         })
       );
-        if (this.props.rounds - this.state.currentRound === 0) { //not sure why this is 1 instead of 0...
+      this.props.updateAppLevelRound();
+        if (this.props.rounds - this.state.currentRound === 0) {
           this.setState({ nudgeText: "Finish the story here" })
         }
       }
@@ -158,12 +174,34 @@ class Writingpaper extends React.Component {
     console.log("They're ready to quit!");
   }
 
+  // RemovePlayerModal = (props) => {
+  //   return (
+  //     <Modal />
+  //     <div>{{allPlayers: props.allPlayers}}</div>
+  //   )
+  // }
+
+  // const Child = (props) => {
+  //   return (
+  //     <div style={{backgroundColor: props.eyeColor}} />
+  //   )
+  // }
+
+  // toggleRemovePlayerModal = () => {
+  //   this.setState({ showRemovePlayerModal: true });
+  // }
+
   // waitText = () => {
   //   return "Oh wow!";
   //   // return '<div>'+'<p>Waiting for everyone to finish the round.</p>'+'<p>In the meantime, enjoy this dancing unicorn</p>'+'</div>';
   // }
 
   render() {
+    // let allPlayers = this.props.allPlayers;
+    // let playerBoard = [];
+    // for (let q = 0; q < allPlayers.length; q++) {
+    //   playerBoard.push(allPlayers[q].name);
+    // }
     let waitText = "";
     let snarkyWaitingLine = "";
     if (!this.props.finalStory) {
@@ -304,11 +342,31 @@ class Writingpaper extends React.Component {
                 <Button variant="success">Reveal My Story</Button>
               </Link>
           </div>
+          ) : (
+            <div>
+            </div>
+          )
+        }
+
+        {this.props.isHost && !this.props.hasFinalStory ? ( 
+          <div>
+            <p>
+
+            </p>
+            <RemovePlayerModal 
+              allPlayers={this.props.allPlayers} 
+              removePlayer={this.props.removePlayer} 
+              playerToDelete={this.props.playerToDelete}
+              updatePlayerToDelete={this.props.updatePlayerToDelete}
+              currentRound={this.state.currentRound}
+              />
+          </div>
         ) : (
           <div>
           </div>
         )
-      }
+        }
+
       {!this.state.storySubmitted && !this.props.hasFinalStory? (
         <div>
         <p></p>

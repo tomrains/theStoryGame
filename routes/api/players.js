@@ -47,7 +47,8 @@ router.put('/:code', (req, res) => {
     }
     game.save();
     let info = {
-      playerNumber: game.players[playerNumber].number
+      playerNumber: game.players[playerNumber].number,
+      playerId: game.players[playerNumber]._id
     }
     res.json(info);
   });
@@ -63,5 +64,65 @@ router.get('/:code/player', (req, res) => {
     res.json(game);
   });
 });
+
+// @route   PUT api/players/delete/:code/:round/:playerId
+// @desc    Delete a specific player from a match in progress
+// @check   TBD
+router.put('/delete/:code/:round/:playerId', (req, res) => {
+  let code = req.params.code;
+  let playerId = req.params.playerId;
+  console.log(typeof playerId);
+  console.log(playerId);
+  let round = req.params.round - 1;
+  Game.find({code: code}, function(err, game) {
+    let toDelete;
+    console.log(`the round is ${round}`);
+    console.log(code);
+    console.log("fixing to delete a player");
+    console.log(game[0]);
+    playerId = playerId;
+    for (let i = 0; i < game[0].players.length; i++) { //change this to id eventually
+      console.log(`the found id is ${game[0].players[i]._id}`);
+      console.log(`compare this to ${playerId}`);
+      if (game[0].players[i]._id.toString() === playerId) {
+        console.log("these are the same id");
+        toDelete = i;
+      }
+    }
+    console.log(`going to delete player ${toDelete}`);
+    //add functionality if 2 found
+    //add functionality if none found
+    game[0].players.splice(toDelete, 1);
+    //add functionality to change numbers of the players AFTER this player
+    for (let q = 0; q + toDelete < game[0].players.length; q++) {
+      game[0].players[q + toDelete].number = toDelete + q;
+    }
+
+    //toDelete is the player we are removing
+    // storiesSubmitted, storiesReturned, and storyTexts
+    // later we can figure out how to do this if theyve already submitted story or something (could check and see)
+    for (let v = round; v < game[0].rounds; v++) {
+      console.log(`game[0].storiesSubmitted[v][toDelete] is ${game[0].storiesSubmitted[v][toDelete]}`);
+      // game[0].storiesSubmitted[v][toDelete] = true;
+      // game[0].storiesReturned[v][toDelete] = true;
+      //for current round, check to see if player has submitted story. if they have, don't delete (could do this for all - if not false, dont delete)
+      game[0].storyTexts[v].splice(toDelete, 1);
+      game[0].storiesSubmitted[v].splice(toDelete, 1);
+      game[0].storiesReturned[v].splice(toDelete, 1);
+    }
+
+    //so the player after would not be the "toDelete" number
+    game[0].playerDeleted = true;
+    game[0].markModified('storiesSubmitted');
+    game[0].markModified('storiesReturned');
+    game[0].markModified('storyTexts');
+    game[0].markModified('playerDeleted');
+    game[0].markModified('players');
+    game[0].save();
+    console.log(game[0]);
+    res.json(game);
+  });
+});
+
 
 module.exports = router;

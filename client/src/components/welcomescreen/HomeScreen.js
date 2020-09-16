@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 // import { BrowserRouter as Router, Link } from "react-router-dom";
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Alert } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import HelpModal from './HelpModal.js';
@@ -107,15 +107,25 @@ class HomeScreen extends React.Component {
           </Form.Group>
 
           <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Label>Select Avatar</Form.Label>
+            <Form.Label>Select emoji as your avatar</Form.Label>
             <Route path="/" render={(props) => (
               <Avatars {...props}
               updateAvatar = {this.props.updateAvatar} />
             )}
             />
           </Form.Group>
-          
         </Form>
+
+        {this.props.playerChoseAvatar ? (
+          <Alert variant="primary" transition="fade">
+            {this.props.playerAvatar} selected
+          </Alert>
+          ) : (
+            <div>
+            </div>
+          )
+        }
+
             {!this.props.playerName ||
               !this.props.playerAvatar ||
               !this.props.rounds ? (

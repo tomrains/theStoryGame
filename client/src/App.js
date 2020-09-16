@@ -12,6 +12,7 @@ import Join from './components/signup/Join.js'
 import StoryRevealed from './components/storyrevealed/StoryRevealed.js';
 import HomeScreen from './components/welcomescreen/HomeScreen.js';
 import WritingPaper from './components/writingpaper/WritingPaper.js';
+import MainPage from './components/mainpage/MainPage.js';
 
 class App extends Component {
   constructor(props) {
@@ -21,19 +22,24 @@ class App extends Component {
       gameIdUrl: null,
       gameIndex: null,
       players: [],
+      allPlayers: [],
       playerName: "",
       playerAvatar: "🤠",
       playerNumber: null,
+      playerId: null,
       rounds: 3,
+      appLevelRound: 1,
       doesGameIdExist: null,
       isHost: false,
       finalStory: null,
-      hasFinalStory: false
+      hasFinalStory: false,
+      playerChoseAvatar: false,
+      playerToDelete: null
     }
   }
 
-  updateGameId = (gameId) => {
-    this.setState({ gameId: gameId })
+  updateGameId = (gameIdValue) => {
+    this.setState({ gameId: gameIdValue })
   }
 
   updateGameIdUrl = (gameIdUrl) => {
@@ -55,6 +61,10 @@ class App extends Component {
     this.setState({ playerNumber: playerNumber })
   }
 
+  updatePlayerId = (playerId) => {
+    this.setState({ playerId: playerId })
+  }
+
   howManyRounds = (rounds) => {
     this.setState({ rounds: rounds })
   }
@@ -69,7 +79,8 @@ class App extends Component {
   }
 
   updateAvatar = (avatar) => {
-    this.setState({ playerAvatar: avatar }) //changed this from e.target.value
+    this.setState({ playerAvatar: avatar }); //changed this from e.target.value
+    this.setState({ playerChoseAvatar: true}); //this make the alert show up
   }
 
   updateFinalStory = (finalStory) => {
@@ -80,6 +91,37 @@ class App extends Component {
     this.setState({ hasFinalStory: true })
   }
 
+  updateAllPlayers = (info) => {
+    this.setState({ allPlayers: info });
+  }
+
+  updatePlayerToDelete = (e) => {
+    if (e.target.name === this.state.playerToDelete) {
+      this.setState({ playerToDelete: null });
+    }
+    else {
+      this.setState({ playerToDelete: e.target.name })
+    }
+  }
+
+  removePlayer = (round) => {
+    // console.log("remove player");
+    // console.log(e);
+    // console.log(e.target);
+    // console.log(e.target.className);
+    // console.log(e.target.name);
+    // console.log(e.target.type);
+    // console.log(e.target.id);
+    // console.log(e.target.playernumber);
+    // console.log(e.target.playerId);
+    // let info = {
+    //   playerId: this.state.playerToDelete,
+    // }
+    axios.put(`api/players/delete/${this.state.gameId}/${this.state.appLevelRound}/${this.state.playerToDelete}`)
+        .then(res => this.setState({ allPlayers: res.data[0].players })); 
+        // .then(res => console.log(res));
+  }
+
   startGame = () => {
     if (this.state.isHost) {
       axios.put(`api/games/${this.state.gameId}/startGame`)
@@ -87,6 +129,10 @@ class App extends Component {
     else {
       return;
     }
+  }
+
+  updateAppLevelRound = () => {
+    this.setState({ appLevelRound: this.state.appLevelRound + 1 });
   }
 
 
@@ -111,7 +157,9 @@ class App extends Component {
               playerNumber = {this.state.playerNumber}
               playerName = {this.state.playerName}
               playerAvatar = {this.state.playerAvatar}
-              rounds = {this.state.rounds} />
+              rounds = {this.state.rounds} 
+              updateAllPlayers = {this.updateAllPlayers}
+              />
             )}
           />
           <Route path="/join" render={(props) => (
@@ -122,11 +170,14 @@ class App extends Component {
             updateGameId = {this.updateGameId}
             updateGameIdUrl = {this.updateGameIdUrl}
             updatePlayerNumber = {this.updatePlayerNumber}
+            updatePlayerId = {this.updatePlayerId}
             howManyRounds = {this.howManyRounds}
             playerName = {this.state.playerName}
             playerAvatar = {this.state.playerAvatar}
             updateName = {this.updateName}
-            updateAvatar = {this.updateAvatar} />
+            updateAvatar = {this.updateAvatar}
+            playerChoseAvatar = {this.state.playerChoseAvatar} 
+            />
             )}
           />
           <Route path="/story" render={(props) => (
@@ -139,7 +190,7 @@ class App extends Component {
             playerAvatar = {this.state.playerAvatar} />
           )}
           />
-          <Route exact path="/" render={(props) => (
+          <Route path="/home" render={(props) => (
             <HomeScreen {...props}
             gameIdUrl = {this.state.gameIdUrl}
             updateGameId = {this.updateGameId}
@@ -155,7 +206,14 @@ class App extends Component {
             playerNumber = {this.state.playerNumber}
             playerName = {this.state.playerName}
             playerAvatar = {this.state.playerAvatar}
+            playerChoseAvatar = {this.state.playerChoseAvatar}
             hostSetsRoundNumber = {this.hostSetsRoundNumber}
+            />
+          )}
+          />
+          <Route exact path="/" render={(props) => (
+            <MainPage {...props}
+            updateGameId = {this.updateGameId}
             />
           )}
           />
@@ -164,12 +222,22 @@ class App extends Component {
             isHost={this.state.isHost}
             updateRoundNumber={this.updateRoundNumber}
             playerNumber = {this.state.playerNumber}
+            updatePlayerNumber = {this.updatePlayerNummber}
             gameId = {this.state.gameId}
             rounds = {this.state.rounds}
             finalStory = {this.state.finalStory}
             updateFinalStory = {this.updateFinalStory}
             hasFinalStory={this.state.hasFinalStory}
-            updateHasFinalStory={this.updateHasFinalStory} />
+            updateHasFinalStory={this.updateHasFinalStory}
+            allPlayers = {this.state.allPlayers}
+            removePlayer = {this.removePlayer}
+            playersToDelete = {this.playersToDelete}
+            updatePlayerToDelete = {this.updatePlayerToDelete}
+            updateAllPlayers = {this.updateAllPlayers}
+            playerName = {this.state.playerName}
+            updateAppLevelRound = {this.updateAppLevelRound}
+            appLevelRound = {this.state.appLevelRound}
+            />
           )}
           />
         </div>

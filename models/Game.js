@@ -27,6 +27,10 @@ const GameSchema = new mongoose.Schema({
         default: false
     },
     players: [Player],
+    playerDeleted: {
+      type: Boolean,
+      default: false
+    },
     storiesSubmitted: [],
     storiesReturned: [],
     storyTexts: []

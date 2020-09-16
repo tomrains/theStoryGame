@@ -36,14 +36,25 @@ router.post('/write/:code', (req, res) => {
   });
 });
 
-// @route   GET api/stories/:code/storiesSubmitted
-// @desc    See if all stories have been submitted for the round
+// @route   GET api/stories/:code/:round/:gameId/storiesSubmitted
+// @desc    See if all stories have been submitted for the round, and see if you need a new playerNumber
 // @check   Passed
-router.get('/:code/:round/storiesSubmitted', (req, res) => {
+router.get('/:code/:round/:gameId/storiesSubmitted', (req, res) => {
   // let playerNumber = req.body.playerNumber;
   let code = req.params.code;
-  // let round = parseInt(req.params.round) - 1;
+  let gameId = req.params.gameId;
+  console.log(`the name is ${gameId}`);
   Game.find({code: code}, function(err, game) {
+    let newNumber = null;
+    if (game[0].playerDeleted) {
+      // look for your name and avatar?
+      //do stuff to change your number
+      for (let q = 0; q < game[0].players.length; q++) {
+        if (game[0].players[q]._id === gameId) {
+          newNumber = game[0].players[q].number;
+        }
+      }
+    }
     console.log(game);
     let length = game[0].players.length;
     let round = game[0].currentRound - 1;
@@ -105,7 +116,8 @@ router.get('/:code/:round/storiesSubmitted', (req, res) => {
     console.log(`The playersStillWorking variable is ${playersStillWorking}`);
     let storyInfo = {
       everyoneHasSubmitted: allSubmitted,
-      playersStillWorking: playersStillWorking
+      playersStillWorking: playersStillWorking,
+      newNumber: newNumber
     }
     res.json(storyInfo);
   });
@@ -119,6 +131,9 @@ router.put('/:code/grabNewStory', (req, res) => {
   // let round = req.body.round - 1;
   // let roundWeAreOn = req.body.round; //this will be used for something else
   let playerNumber = req.body.playerNumber;
+  if (req.body.newPlayerNumber !== null) {
+    playerNumber = req.body.newPlayerNumber;
+  }
   let storyNumber;
   Game.findOne({code: code}, function(err, game) {
     console.log(game);
