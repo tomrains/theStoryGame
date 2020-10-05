@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 // import { BrowserRouter as Router, Link } from "react-router-dom";
 import { Button, Form, Alert } from 'react-bootstrap';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Route, Link } from "react-router-dom";
 
 import HelpModal from './HelpModal.js';
 import Avatars from './Avatars.js';

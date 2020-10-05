@@ -2,7 +2,7 @@ import React from 'react';
 
 import Avatars from '../welcomescreen/Avatars.js';
 import { Button, Form, Alert } from 'react-bootstrap';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Route, Link } from "react-router-dom";
 
 import axios from 'axios';
 

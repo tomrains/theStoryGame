@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import "./waitscreen.css";
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 // import Form from 'react-bootstrap/Form';
 // import Button from 'react-bootstrap/Button';
 // import Dropdown from 'react-bootstrap/Dropdown';

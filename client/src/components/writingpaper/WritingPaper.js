@@ -203,14 +203,14 @@ class Writingpaper extends React.Component {
     //   playerBoard.push(allPlayers[q].name);
     // }
     let waitText = "";
-    let snarkyWaitingLine = "";
+    // let snarkyWaitingLine = "";
     if (!this.props.finalStory) {
       waitText = `${this.state.playersStillWorking}`;
-      snarkyWaitingLine = `${this.state.snarkyWaitingLine}`;
+      // snarkyWaitingLine = `${this.state.snarkyWaitingLine}`;
     }
     else {
       waitText = null;
-      snarkyWaitingLine = null;
+      // snarkyWaitingLine = null;
     }
 
     //variables, logic and so on here
