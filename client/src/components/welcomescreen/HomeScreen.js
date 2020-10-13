@@ -21,7 +21,18 @@ class HomeScreen extends React.Component {
     }
   }
 
+  updateState = () => {
+    this.props.removePreviousFinalStory();
+    this.props.resetPlayerChoseAvatar();
+    this.props.resetPlayerToDelete();
+    this.props.resetRounds();
+    this.props.resetPlayerName();
+    this.props.updateHost();
+    this.props.resetAppLevelRound();
+  }
+
   componentDidMount() {
+    this.updateState();
     this.gameURLGenerator();
   }
 

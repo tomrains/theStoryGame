@@ -54,6 +54,17 @@ class Join extends React.Component {
   //   // Add in something that takes the student number and puts it into the players state
   // }
 
+  updateState = () => {
+    //change all these to functions -- these arent state!
+    this.props.removeHostStatus();
+    this.props.removePreviousFinalStory();
+    this.props.resetPlayerChoseAvatar();
+    this.props.resetPlayerToDelete();
+    this.props.resetRounds();
+    this.props.resetPlayerName();
+    this.props.resetAppLevelRound();
+  }
+
   putPlayer = (e) => {
     //don't submit information twice
     if (this.state.playerSubmitted) {
@@ -115,6 +126,7 @@ class Join extends React.Component {
         //nothing
       }
     }
+    gameId = gameId.toUpperCase();
     if (gameId.length > 4) {
       gameId = gameId.slice(0, 4);
     }
@@ -134,6 +146,7 @@ class Join extends React.Component {
 
   componentDidMount() {
     this.getCodeFromURL();
+    this.updateState();
   }
 
   hasGameStarted = (hasStarted) => {

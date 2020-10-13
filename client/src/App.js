@@ -38,6 +38,30 @@ class App extends Component {
     }
   }
 
+  removePreviousFinalStory = () => {
+    this.setState({ finalStory: null });
+  }
+
+  resetPlayerChoseAvatar = () => {
+    this.setState({ playerChoseAvatar: false });
+  }
+
+  resetPlayerToDelete = () => {
+    this.setState({ playerToDelete: null });
+  }
+
+  resetRounds = () => {
+    this.setState({ rounds: 3 });
+  }
+
+  resetPlayerName = () => {
+    this.setState({ playerName: null });
+  }
+
+  resetAppLevelRound = () => {
+    this.setState({ appLevelRound: 1 });
+  }
+
   updateGameId = (gameIdValue) => {
     this.setState({ gameId: gameIdValue })
   }
@@ -48,6 +72,10 @@ class App extends Component {
 
   updateHost = () => {
     this.setState({ isHost: true })
+  }
+
+  removeHostStatus = () => {
+    this.setState({ isHost: false });
   }
 
   // updateRoundNumber = (number) => {
@@ -176,7 +204,14 @@ class App extends Component {
             playerAvatar = {this.state.playerAvatar}
             updateName = {this.updateName}
             updateAvatar = {this.updateAvatar}
-            playerChoseAvatar = {this.state.playerChoseAvatar} 
+            playerChoseAvatar = {this.state.playerChoseAvatar}
+            removeHostStatus = {this.removeHostStatus}
+            removePreviousFinalStory = {this.removePreviousFinalStory}
+            resetPlayerChoseAvatar = {this.resetPlayerChoseAvatar}
+            resetPlayerToDelete = {this.resetPlayerToDelete}
+            resetRounds = {this.resetRounds}
+            resetPlayerName = {this.resetPlayerName}
+            resetAppLevelRound = {this.resetAppLevelRound}
             />
             )}
           />
@@ -208,6 +243,12 @@ class App extends Component {
             playerAvatar = {this.state.playerAvatar}
             playerChoseAvatar = {this.state.playerChoseAvatar}
             hostSetsRoundNumber = {this.hostSetsRoundNumber}
+            removePreviousFinalStory = {this.removePreviousFinalStory}
+            resetPlayerChoseAvatar = {this.resetPlayerChoseAvatar}
+            resetPlayerToDelete = {this.resetPlayerToDelete}
+            resetRounds = {this.resetRounds}
+            resetPlayerName = {this.resetPlayerName}
+            resetAppLevelRound = {this.resetAppLevelRound}
             />
           )}
           />
