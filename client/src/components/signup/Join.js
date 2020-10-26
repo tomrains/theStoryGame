@@ -55,14 +55,17 @@ class Join extends React.Component {
   // }
 
   updateState = () => {
-    //change all these to functions -- these arent state!
     this.props.removeHostStatus();
     this.props.removePreviousFinalStory();
     this.props.resetPlayerChoseAvatar();
     this.props.resetPlayerToDelete();
     this.props.resetRounds();
     this.props.resetPlayerName();
+    this.props.resetPlayerId();
     this.props.resetAppLevelRound();
+    this.props.resetHasFinalStory();
+    this.props.resetRemovablePlayers();
+    this.props.resetAllPlayers();
   }
 
   putPlayer = (e) => {
@@ -181,15 +184,13 @@ class Join extends React.Component {
         <Form.Label>Name</Form.Label>
         <Form.Control type="name" placeholder="Enter name" onChange={this.props.updateName}/>
       </Form.Group>
-      <Form.Group controlId="exampleForm.ControlSelect1">
-        <Form.Label>Select Avatar</Form.Label>
-        <Route path="/join" render={(props) => (
-          <Avatars {...props}
-          updateAvatar = {this.props.updateAvatar} />
-        )}
-        />
-      </Form.Group>
-    </Form>
+      <Form.Group controlId="emoji selector">
+            <Form.Label>Select emoji as your avatar</Form.Label>
+              <Avatars
+              updateAvatar = {this.props.updateAvatar} 
+              />
+          </Form.Group>
+        </Form>
 
     
 

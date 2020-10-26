@@ -23,6 +23,29 @@ router.post('/add', (req, res) => {
     });
 });
 
+// @route   PUT api/games/updateRound/:code
+// @desc    Host updates database with new round number
+// @check   TBD
+
+router.put('/updateRound/:code', (req, res) => { 
+  let code = req.params.code;
+  Game.findOne({code: code}, function(err, game) {
+    // if (err) {
+    //   res.status(404).send("data is not found");
+    //   return;
+    // }
+    game.currentRound = game.currentRound + 1;
+    game.markModified('currentRound');
+    game.save()
+    .then(game => {
+      res.status(200).json('round updated successfully');
+    })
+    .catch(err => {
+      res.status(400).send('updating round failed');
+    });
+  });
+});
+
 // @route   PUT api/games/:code/startGame
 // @desc    Host makes the game begin
 // @check   Passed
@@ -38,10 +61,10 @@ router.put('/:code/startGame', (req, res) => {
       let roundArray = [];
       for (let q = 0; q < game.players.length; q++) {
         roundArray.push(false);
-        console.log("false added!");
+        // console.log("false added!");
       }
       submissionArray.push(roundArray);
-      console.log("player array of falses added")
+      // console.log("player array of falses added")
     }
     game.storiesSubmitted = submissionArray;
 
@@ -52,12 +75,13 @@ router.put('/:code/startGame', (req, res) => {
       let roundArray2 = [];
       for (let v = 0; v < game.players.length; v++) {
         roundArray2.push(false);
-        console.log("false added!");
+        // console.log("false added!");
       }
       returnArray.push(roundArray2);
-      console.log("player array of falses added")
+      // console.log("player array of falses added")
     }
     game.storiesReturned = returnArray;
+    game.originalNumberOfPlayers = game.players.length;
 
     // Initialize storyText array where stories will be stored
     let draftsLocation = game.storyTexts;
@@ -66,19 +90,20 @@ router.put('/:code/startGame', (req, res) => {
       let storiesArray2 = [];
       for (let s = 0; s < game.players.length; s++) {
         storiesArray.push(false);
-        console.log("false added!");
+        // console.log("false added!");
       }
       storiesArray.push(storiesArray2);
-      console.log("story array of falses added")
+      // console.log("story array of falses added");
     }
     game.storyTexts = returnArray;
     game.markModified('storiesSubmitted');
     game.markModified('storiesReturned');
     game.markModified('storyTexts');
+    game.markModified('originalNumberOfPlayers');
     game.save();
-    console.log(game.storiesSubmitted);
-    console.log(game.storiesReturned);
-    console.log(game.storyTexts);
+    // console.log(game.storiesSubmitted);
+    // console.log(game.storiesReturned);
+    // console.log(game.storyTexts);
     res.json(game);
   });
 });

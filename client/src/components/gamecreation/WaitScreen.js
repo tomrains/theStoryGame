@@ -17,7 +17,8 @@ class WaitScreen extends React.Component {
       gameInfo: "Default",
       gameStarted: false,
       copySuccess: '',
-      copied: false
+      copied: false,
+      removablePlayers: "Default"
     }
   }
 
@@ -70,22 +71,26 @@ copyCodeToClipboard = () => {
         // .then(game => this.setState({ gameInfo: game.data[0].players }));
         .then(game => this.setState({
           gameInfo: game.data[0].players,
-          gameStarted: game.data[0].gameStarted
+          gameStarted: game.data[0].gameStarted,
+          // removablePlayers: game.data[0].removablePlayers
         }));
         console.log(this.state.gameInfo);
         this.props.updateAllPlayers(this.state.gameInfo);
+        this.props.updateRemovablePlayers();
+        // this.props.updateRemovablePlayers();
     }
   }
 
-  beginGame = (e) => {
-    // e.preventDefault();
-    console.log("begin game functionality will go here");
-    //do a put request to server to begin game
-    let gameStatus = {
-      gameStatus: true
-    }
-    axios.put(`api/games/${this.props.gameId}/startGame`, gameStatus)
-  }
+  // beginGame = (e) => {
+  //   this.props.updateRemovablePlayers();
+  //   // e.preventDefault();
+  //   console.log("begin game functionality will go here");
+  //   //do a put request to server to begin game
+  //   let gameStatus = {
+  //     gameStatus: true
+  //   }
+  //   axios.put(`api/games/${this.props.gameId}/startGame`, gameStatus)
+  // }
 
 //   copyToClipboard = (e) => {
 //   this.textArea.select();
@@ -109,6 +114,9 @@ copyCodeToClipboard = () => {
     for (let i = 0; i < players.length; i++) {
       playerBoard.push(players[i].name);
     }
+    // if (playerBoard.length < 1) {
+    //   playerBoard = "Loading players...";
+    // }
     return (
       <div>
       
@@ -182,8 +190,20 @@ copyCodeToClipboard = () => {
             <div>
             </div>
           )}
+
+          {!this.state.gameStarted && this.props.isHost && this.state.gameInfo.length <= 1 ? (
+            <div>
+            <p></p>
+              <Link to='/writing'>
+                <Button variant="primary" disabled>Start Game for Everyone</Button>
+              </Link>
+            </div>
+          ) : (
+            <div>
+            </div>
+          )}
     
-          {!this.state.gameStarted && this.props.isHost ? (
+          {!this.state.gameStarted && this.props.isHost && this.state.gameInfo.length > 1 ? (
             <div>
             <p></p>
               <Link to='/writing'>

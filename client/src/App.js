@@ -22,7 +22,8 @@ class App extends Component {
       gameIdUrl: null,
       gameIndex: null,
       players: [],
-      allPlayers: [],
+      allPlayers: [{name: "Loading Players", _id: "Test ID"}],
+      removablePlayers: [{name: "Loading Players", _id: "Test ID"}],
       playerName: "",
       playerAvatar: "🤠",
       playerNumber: null,
@@ -34,8 +35,46 @@ class App extends Component {
       finalStory: null,
       hasFinalStory: false,
       playerChoseAvatar: false,
-      playerToDelete: null
+      playerToDelete: null,
+      playerNumberToDelete: null
     }
+  }
+
+  removePlayer = (round) => {
+    // console.log("remove player");
+    // console.log(e);
+    // console.log(e.target);
+    // console.log(e.target.className);
+    // console.log(e.target.name);
+    // console.log(e.target.type);
+    // console.log(e.target.id);
+    // console.log(e.target.playernumber);
+    // console.log(e.target.playerId);
+    // let info = {
+    //   playerId: this.state.playerToDelete,
+    // }
+    let newRemovablePlayers = [];
+    console.log(`newRemovablePlayers is ${newRemovablePlayers}`);
+    for (let i = 0; i < this.state.removablePlayers.length; i++) {
+      if (i !== this.state.playerNumberToDelete - 1) {
+        newRemovablePlayers.push(this.state.removablePlayers[i]);
+        console.log(`newRemovablePlayers is now ${newRemovablePlayers}`);
+      }
+    }
+    console.log(`newRemovablePlayers is finally ${newRemovablePlayers}`);
+    this.setState({ removablePlayers: newRemovablePlayers });
+    axios.put(`api/players/delete/${this.state.gameId}/${this.state.appLevelRound}/${this.state.playerToDelete}`)
+        .then(res => this.setState({ 
+          allPlayers: res.data[0].players,
+          playerToDelete: null,
+          playerNumberToDelete: null
+          //add in something to update removablePlayers
+          //maybe get the number of the deletedPlayer and remove that from the remoavlePlayers array?
+         })
+          );
+    // this.updateRemovablePlayers();
+
+        // .then(res => console.log(res));
   }
 
   removePreviousFinalStory = () => {
@@ -58,9 +97,26 @@ class App extends Component {
     this.setState({ playerName: null });
   }
 
+  resetPlayerId = () => {
+    this.setState({ playerId: null });
+  }
+
   resetAppLevelRound = () => {
     this.setState({ appLevelRound: 1 });
   }
+
+  resetHasFinalStory = () => {
+    this.setState({ hasFinalStory: false });
+  }
+
+  resetRemovablePlayers = () => {
+    this.setState({ removablePlayers: [{name: "Loading Players", _id: "Test ID"}]});
+  }
+
+  resetAllPlayers = () => {
+    this.setState({ allPlayers: [] });
+  }
+
 
   updateGameId = (gameIdValue) => {
     this.setState({ gameId: gameIdValue })
@@ -123,34 +179,95 @@ class App extends Component {
     this.setState({ allPlayers: info });
   }
 
-  updatePlayerToDelete = (e) => {
-    if (e.target.name === this.state.playerToDelete) {
-      this.setState({ playerToDelete: null });
+  // updateRemovablePlayers = (info, boolean) => {
+  //   if (boolean) {
+  //     let removablePlayers = info.shift();
+  //     this.setState({ removablePlayers: removablePlayers});
+  //   }
+  //   else {
+  //     this.setState({ removablePlayers: info });
+  //   }
+  // }
+
+  updateRemovablePlayers = (playerInfo) => {
+    // if (this.state.allPlayers === [] || !this.state.allPlayers || this.state.allPlayers === undefined) {
+    //   return;
+    // }
+    if (playerInfo) {
+      console.log("we got some player info!");
+      let removablePlayers = [];
+      for (let i = 1; i < playerInfo.length; i++) {
+        removablePlayers.push(playerInfo[i]);
+        console.log(`removablePlayers is now ${removablePlayers}`);
+      }
+      console.log(`OUT OF THE LOOP. removablePlayers is now ${removablePlayers}`);
+      this.setState({ removablePlayers: removablePlayers });
     }
     else {
-      this.setState({ playerToDelete: e.target.name })
+      let removablePlayers = [];
+      for (let i = 1; i < this.state.allPlayers.length; i++) {
+        removablePlayers.push(this.state.allPlayers[i]);
+        console.log(`removablePlayers is now ${removablePlayers}`);
+      }
+      console.log(`OUT OF THE LOOP. removablePlayers is now ${removablePlayers}`);
+      this.setState({ removablePlayers: removablePlayers });
     }
+    this.updatePlayerToDelete(false, this.state.removablePlayers[0]);
   }
 
-  removePlayer = (round) => {
-    // console.log("remove player");
+  updatePlayerToDelete = (e, playerNumber) => {
+    console.log("wer're in UpdatePlayerToDelete");
     // console.log(e);
-    // console.log(e.target);
+    // console.log(playerNumber);
+    // console.log(e.target.funtime);
     // console.log(e.target.className);
-    // console.log(e.target.name);
     // console.log(e.target.type);
-    // console.log(e.target.id);
-    // console.log(e.target.playernumber);
-    // console.log(e.target.playerId);
-    // let info = {
-    //   playerId: this.state.playerToDelete,
+    if (e && playerNumber) {
+      console.log("there is an e and playerNumber");
+      console.log(e);
+      console.log(e.target);
+      console.log(e.target.id);
+      playerNumber = parseInt(playerNumber);
+      console.log(playerNumber);
+      this.setState({ 
+      playerToDelete: e.target.id,
+      playerNumberToDelete: playerNumber 
+      });
+    }
+    else if (!e && playerNumber) { // If you've just deleted a player and want to update the Removable Players
+    console.log("there is no e, but there is a playerNumber");
+      this.setState({ 
+        playerToDelete: null,
+        playerNumberToDelete: null
+      }); 
+    }
+    else if (!e && !playerNumber) { // If you close the Modal, this happens
+      if (this.state.playerToDelete === null && this.state.playerNumberToDelete === null) {
+        return;
+      }
+      console.log("there isn't an e or a playerNumber");
+      this.setState({ 
+        playerToDelete: null,
+        playerNumberToDelete: null
+      }); 
+    }
+    else {
+      console.log("theres no playerNumber");
+      return;
+    }
+    // console.log(e.target);
+    // if (e.target.id === this.state.playerToDelete) {
+    //   this.setState({ 
+    //     playerToDelete: null,
+    //     playerNumberToDelete: null 
+    //   });
     // }
-    axios.put(`api/players/delete/${this.state.gameId}/${this.state.appLevelRound}/${this.state.playerToDelete}`)
-        .then(res => this.setState({ allPlayers: res.data[0].players })); 
-        // .then(res => console.log(res));
+    // else {
+    // }
   }
 
   startGame = () => {
+    this.updateRemovablePlayers();
     if (this.state.isHost) {
       axios.put(`api/games/${this.state.gameId}/startGame`)
     }
@@ -187,6 +304,7 @@ class App extends Component {
               playerAvatar = {this.state.playerAvatar}
               rounds = {this.state.rounds} 
               updateAllPlayers = {this.updateAllPlayers}
+              updateRemovablePlayers = {this.updateRemovablePlayers}
               />
             )}
           />
@@ -212,6 +330,10 @@ class App extends Component {
             resetRounds = {this.resetRounds}
             resetPlayerName = {this.resetPlayerName}
             resetAppLevelRound = {this.resetAppLevelRound}
+            resetHasFinalStory = {this.resetHasFinalStory}
+            resetPlayerId = {this.resetPlayerId}
+            resetRemovablePlayers = {this.resetRemovablePlayers}
+            resetAllPlayers = {this.resetAllPlayers}
             />
             )}
           />
@@ -225,7 +347,7 @@ class App extends Component {
             playerAvatar = {this.state.playerAvatar} />
           )}
           />
-          <Route path="/home" render={(props) => (
+          <Route exact path="/" render={(props) => (
             <HomeScreen {...props}
             gameIdUrl = {this.state.gameIdUrl}
             updateGameId = {this.updateGameId}
@@ -233,6 +355,7 @@ class App extends Component {
             gameId = {this.state.gameId}
             updateGameIdUrl = {this.updateGameIdUrl}
             updatePlayerNumber = {this.updatePlayerNumber}
+            updatePlayerId = {this.updatePlayerId}
             howManyRounds = {this.howManyRounds}
             rounds = {this.state.rounds}
             updateName = {this.updateName}
@@ -249,10 +372,14 @@ class App extends Component {
             resetRounds = {this.resetRounds}
             resetPlayerName = {this.resetPlayerName}
             resetAppLevelRound = {this.resetAppLevelRound}
+            resetHasFinalStory = {this.resetHasFinalStory}
+            resetPlayerId = {this.resetPlayerId}
+            resetRemovablePlayers = {this.resetRemovablePlayers}
+            resetAllPlayers = {this.resetAllPlayers}
             />
           )}
           />
-          <Route exact path="/" render={(props) => (
+          <Route exact path="/backUpHome" render={(props) => (
             <MainPage {...props}
             updateGameId = {this.updateGameId}
             />
@@ -278,6 +405,9 @@ class App extends Component {
             playerName = {this.state.playerName}
             updateAppLevelRound = {this.updateAppLevelRound}
             appLevelRound = {this.state.appLevelRound}
+            removablePlayers = {this.state.removablePlayers}
+            updateRemovablePlayers = {this.updateRemovablePlayers}
+            resetPlayerToDelete = {this.resetPlayerToDelete}
             />
           )}
           />

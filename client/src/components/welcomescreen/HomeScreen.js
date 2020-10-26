@@ -27,8 +27,12 @@ class HomeScreen extends React.Component {
     this.props.resetPlayerToDelete();
     this.props.resetRounds();
     this.props.resetPlayerName();
+    this.props.resetPlayerId();
     this.props.updateHost();
     this.props.resetAppLevelRound();
+    this.props.resetHasFinalStory();
+    this.props.resetRemovablePlayers();
+    this.props.resetAllPlayers();
   }
 
   componentDidMount() {
@@ -57,7 +61,10 @@ class HomeScreen extends React.Component {
     for ( var i = 0; i < 4; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    let gameIdUrl = `secret-wildwood-99621.herokuapp.com/join/${result}`
+    let gameIdUrl = `localhost:3000/join/${result}`;
+    
+    // let gameIdUrl = `secret-wildwood-99621.herokuapp.com/join/${result}`;
+
     // this.setState({ gameIdUrl: gameIdUrl });
     // this.setState({ gameId: result });
     this.props.updateGameId(result);
@@ -92,7 +99,7 @@ class HomeScreen extends React.Component {
     console.log(newGameInfo);
     axios.put('api/players/add/:code', newGameInfo)
     // axios.put('/add/:code', newGameInfo)
-        .then(res => console.log(res.data));
+        .then(res => this.props.updatePlayerId(res.data.playerId));
         this.props.updatePlayerNumber(0);
         this.setState({ playerSubmitted: true });
   }
@@ -101,14 +108,14 @@ class HomeScreen extends React.Component {
   render() {
       return (
         <div>
-        <h1>The Story Game</h1>
+        <h1>Create a Story Game</h1>
         <Form>
           <Form.Group controlId="exampleForm.ControlInput1">
             <Form.Label>Name</Form.Label>
             <Form.Control type="name" placeholder="Enter name" onChange={this.props.updateName}/>
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Label>Number of Rounds</Form.Label>
+            <Form.Label>Number of rounds</Form.Label>
             <Form.Control as="select" onClick={this.props.hostSetsRoundNumber}>
               <option>3</option>
               <option>5</option>
@@ -117,13 +124,11 @@ class HomeScreen extends React.Component {
             </Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Label>Select emoji as your avatar</Form.Label>
-            <Route path="/" render={(props) => (
-              <Avatars {...props}
-              updateAvatar = {this.props.updateAvatar} />
-            )}
-            />
+          <Form.Group controlId="emoji selector">
+            <Form.Label>Select emoji to represent you</Form.Label>
+              <Avatars
+              updateAvatar = {this.props.updateAvatar} 
+              />
           </Form.Group>
         </Form>
 
@@ -163,3 +168,10 @@ export default HomeScreen;
 
 //i kinda like idea of you pressign the create game button, and then it leads...
 //..you to the screen with the URL and the like
+
+
+{/* <Route path="/home" render={(props) => (
+              <Avatars {...props}
+              updateAvatar = {this.props.updateAvatar} />
+            )}
+            /> */}

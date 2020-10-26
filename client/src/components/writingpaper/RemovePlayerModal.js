@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
@@ -6,12 +6,25 @@ function RemovePlayerModal(props) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
+  
   const handleShow = () => setShow(true);
 
+  // let counter = 0;
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    console.log("heeey");
+    if (props.allPlayers[props.allPlayers.length - 1] !== props.removablePlayers[props.removablePlayers.length - 1]) {
+      props.updateRemovablePlayers();
+      // counter = counter + 3;
+    }
+  });
+
+  if (props.removablePlayers.length > 1) {
   return (
     <>
+
       <Button variant="danger" onClick={handleShow}>
-        Remove Player
+        Remove player
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -19,23 +32,30 @@ function RemovePlayerModal(props) {
           <Modal.Title>Remove a player</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <div>
-            <p>Which player would you like to remove from the game?</p>
-            {props.allPlayers.map(player => { // using props in child component and looping
+
+    <Form>
+    <fieldset>
+      <Form.Group>
+        <Form.Label>Which player would you like to remove from the game?</Form.Label>
+    
+            
+            {props.removablePlayers.map(player => { // using props in child component and looping
                 return (
                     <>
-                    <h4 name="turds">
+                    <h4>
                         {player.name}
-                        <Form>
-                      <Form.Group controlId="formBasicCheckbox">
-                        <Form.Check type="checkbox" label="" onClick={props.updatePlayerToDelete} name={player._id}/>
-                      </Form.Group>
-                    </Form>
+                        
+                        <Form.Check type="radio" label="" name="deleteMe" onClick={(e) => props.updatePlayerToDelete(e, player.number)} id={player._id} funtime={player.number} />
+                      
+                    
                     </h4>
                     </>
                 )
             })}
-                </div>
+                
+            </Form.Group>
+            </fieldset>  
+            </Form>
             </Modal.Body>
         <Modal.Footer>
         <Button variant="danger" onClick={props.removePlayer}>
@@ -47,7 +67,41 @@ function RemovePlayerModal(props) {
         </Modal.Footer>
       </Modal>
     </>
-  );
+  )}
+  else {
+    return (
+      <Button variant="danger" onClick={handleShow} disabled>
+        <em>Remove player</em>
+      </Button>
+    )
+  }
 }
 
 export default RemovePlayerModal;
+
+
+
+
+
+                //what i had there previously:
+                // option onSelect={(e) => props.updatePlayerToDelete(e, player.number)}
+
+
+
+    //             <Form.Label>Which player would you like to remove from the game?</Form.Label>
+    // <Form.Control as="select">
+    //     {props.removablePlayers.map(player => { // using props in child component and looping
+    //             return (
+    //               <>
+    //                 <option onSelect={console.log("i've been selected!")} id={player._id} funtime={player.number}>{player.name}</option>
+    //               </>
+    //             )
+    //         }
+    //     )}
+
+
+    // const handleClose = () => 
+  //   setShow(false);
+  //   if (props.playerToDelete !== null) {
+  //     props.updatePlayerToDelete();
+  //   }
