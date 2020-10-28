@@ -14,7 +14,7 @@ function HelpModal() {
         Help
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Help Section</Modal.Title>
         </Modal.Header>

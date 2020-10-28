@@ -122,6 +122,7 @@ class HomeScreen extends React.Component {
       return (
         <div>
         <h1>Create a <b>Story Game</b> Private Party</h1>
+        <hr />
         <Form>
           <Form.Group controlId="exampleForm.ControlInput1">
             <Form.Label>Your name</Form.Label>
@@ -169,10 +170,19 @@ class HomeScreen extends React.Component {
             }
           <p>
           </p>
+          <hr />
           <p>
             <HelpModal />
           </p>
-          <hr />
+        </div>
+      )
+    }
+  }
+
+export default HomeScreen;
+
+
+{/* <hr />
           <h2>Joining a Game?</h2>
           <div className="form-group" controlId="exampleForm.ControlTextarea1">
                 <p></p>
@@ -181,10 +191,4 @@ class HomeScreen extends React.Component {
           <button class="btn btn-success">
             <Link to='/join'>Join</Link>
           </button>
-          <p></p>
-        </div>
-      )
-    }
-  }
-
-export default HomeScreen;
+          <p></p> */}

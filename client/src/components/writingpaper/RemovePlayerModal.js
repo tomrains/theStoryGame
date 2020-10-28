@@ -30,7 +30,7 @@ function RemovePlayerModal(props) {
         Remove Player
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Remove a player</Modal.Title>
         </Modal.Header>

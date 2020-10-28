@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import SimpleStorage from "react-simple-storage";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-// import "./App.css";
+import "./App.css";
 import axios from 'axios';
 
 //The real components
