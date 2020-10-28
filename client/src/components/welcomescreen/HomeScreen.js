@@ -52,6 +52,19 @@ class HomeScreen extends React.Component {
     this.setState({ rounds: e.target.value });
   }
 
+  deleteDefaultText = (e) => {
+    console.log("hey");
+    if (e.target.value === "Enter 4-letter game code") {
+      e.target.value = "";
+    }
+  }
+
+  updateGameIdValue = (e) => {
+    let gameId = e.target.value.toUpperCase();
+    this.props.updateGameId(gameId);
+    this.props.updateGameIdUrl(`localhost:3000/join/${gameId}`);
+  }
+
   gameURLGenerator = () => {
     // this.props.updateHost(); //okay maybe this wasnt actually needed
     console.log('hey');
@@ -108,10 +121,10 @@ class HomeScreen extends React.Component {
   render() {
       return (
         <div>
-        <h1>Create a Story Game</h1>
+        <h1>Create a <b>Story Game</b> Private Party</h1>
         <Form>
           <Form.Group controlId="exampleForm.ControlInput1">
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Your name</Form.Label>
             <Form.Control type="name" placeholder="Enter name" onChange={this.props.updateName}/>
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlSelect1">
@@ -125,7 +138,7 @@ class HomeScreen extends React.Component {
           </Form.Group>
 
           <Form.Group controlId="emoji selector">
-            <Form.Label>Select emoji to represent you</Form.Label>
+            <Form.Label>Select an emoji to represent you</Form.Label>
               <Avatars
               updateAvatar = {this.props.updateAvatar} 
               />
@@ -159,19 +172,19 @@ class HomeScreen extends React.Component {
           <p>
             <HelpModal />
           </p>
+          <hr />
+          <h2>Joining a Game?</h2>
+          <div className="form-group" controlId="exampleForm.ControlTextarea1">
+                <p></p>
+                  <textarea className="form-control" defaultValue="Enter 4-letter game code" onClick={this.deleteDefaultText} onChange={this.updateGameIdValue} ref={(textarea) => this.textArea = textarea}/>
+            </div>
+          <button class="btn btn-success">
+            <Link to='/join'>Join</Link>
+          </button>
+          <p></p>
         </div>
       )
     }
   }
 
 export default HomeScreen;
-
-//i kinda like idea of you pressign the create game button, and then it leads...
-//..you to the screen with the URL and the like
-
-
-{/* <Route path="/home" render={(props) => (
-              <Avatars {...props}
-              updateAvatar = {this.props.updateAvatar} />
-            )}
-            /> */}

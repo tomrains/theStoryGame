@@ -30,11 +30,64 @@ class Writingpaper extends React.Component {
       avatarOfPreviousPerson: "[Avatar of Previous Person Here]",
       nudgeText: "Begin your story here",
       playersStillWorking: "Submitting story...",
-      snarkyWaitingLine: " Penning a masterpiece, I'm sure.",
+      snarkyWaitingLine: "Penning a masterpiece, I'm sure.",
+      showSnarkyWaitingLine: false,
       newPlayerNumber: null
       // showRemovePlayerModal: false
     }
   }
+
+  snarkyWaitingLines = [
+    "Probably penning a masterpiece.",
+    "Slow but steady wins the race.",
+    "They say the best writers take the longest.",
+    "Easy does it.",
+    "I'm sure they're writing something really good.",
+    "One day, the last shall be first. But not today.",
+    "The turtle eventually beat the hare, you know.",
+    "They must be writing something really good.",
+    "How awesome is their story going to be?",
+    "Maybe given them a friendly push?",
+    "Last to submit, but first in our hearts.",
+    "They say great writers take their time.",
+    "Some writers are slower. Not Danielle Steel, though.",
+    "Kindly do not distract them.",
+    "If you poke them, they might take even longer.",
+    "Truly the best of us.",
+    "They must be writing something so funny.",
+    "But for how much longer?",
+    "Tick tock, tick tock.",
+    "*Insert Jeopardy theme here*",
+    "It's okay, we'll wait.",
+    "Great things come to those who wait.",
+    "Will we still be around when they're done?",
+    "Bless their heart.",
+    "Have you ever asked them their pronouns?",
+    "What's your favorite thing about them?",
+    "Are they on a Windows phone?",
+    "Maybe they type slower than the rest of us.",
+    "That doesn't make them a bad person, though.",
+    "We respect perfecting a story before submitting.",
+    "Gently tease them, please.",
+    "I'm sure they've got something great so far.",
+    "Are they usually late to things?",
+    "Maybe we should call them Godot.",
+    "You can't hurry stories, no, you just have to wait.",
+    "Call us restaurant servers. Because we're all waiting.",
+    "Time for impatient toe tapping.",
+    "Maybe it's their first time doing this.",
+    "Probably writing something obscene.",
+    "*Drumming fingers*",
+    "Don't tell them they're holding up the whole game.",
+    "Be nice about how slow they are.",
+    "Some may say they're slow, we say methodical.",
+    "Genius doesn't come quick.",
+    "But we'll let you know when they're done.",
+    "They're a really great person, don't you think?",
+    "No problem. We'll wait ...",
+    "Maybe they have a slow connection.",
+    "We'd say something snarky, but they're just so darn nice."
+    ]
 
   intervalID;
 
@@ -42,6 +95,7 @@ class Writingpaper extends React.Component {
     // this.getPlayers();
     // this.props.updateRemovablePlayers(this.props.allPlayers);
     this.hasEveryoneSubmitted();
+    this.updateSnarkyWaitingLine();
     // this.props.updateRemovablePlayers(this.props.allPlayers, true);
     // pausing for now so it stops fetching lol
     this.intervalID = setInterval(this.hasEveryoneSubmitted.bind(this), 3000);
@@ -71,7 +125,8 @@ class Writingpaper extends React.Component {
       .then(res => this.setState({
         everyoneHasSubmitted: res.data.everyoneHasSubmitted,
         playersStillWorking: res.data.playersStillWorking,
-        newPlayerNumber: res.data.newNumber
+        newPlayerNumber: res.data.newNumber,
+        showSnarkyWaitingLine: res.data.showSnarkyWaitingLine
        }));
        if (this.state.newPlayerNumber !== null) {
         this.props.updatePlayerNumber(this.state.newPlayerNumber); //this might have some state issues
@@ -113,7 +168,8 @@ class Writingpaper extends React.Component {
           storySubmitted: false,
           everyoneHasSubmitted: false,
           currentRound: res.data.round + 1,
-          isLastRound: res.data.isLastRound
+          isLastRound: res.data.isLastRound,
+          showSnarkyWaitingLine: false
         })
       );
       this.props.updateAppLevelRound();
@@ -123,6 +179,7 @@ class Writingpaper extends React.Component {
       if (this.props.isHost) {
         axios.put(`api/games/updateRound/${this.props.gameId}`);
       }
+      this.updateSnarkyWaitingLine();
       }
     }
   // if you haven't submitted your story, or you have your final story, exit the loop
@@ -192,6 +249,12 @@ class Writingpaper extends React.Component {
     console.log("They're ready to quit!");
   }
 
+  updateSnarkyWaitingLine = () => {
+    console.log("we're inside updateSnarkyWaitingLine");
+    let newSnarkyLine = this.snarkyWaitingLines[Math.floor(Math.random() * (this.snarkyWaitingLines.length - 1))];
+    this.setState({ snarkyWaitingLine: newSnarkyLine });
+  }
+
   // RemovePlayerModal = (props) => {
   //   return (
   //     <Modal />
@@ -221,6 +284,7 @@ class Writingpaper extends React.Component {
     //   playerBoard.push(allPlayers[q].name);
     // }
     let waitText = "";
+    let snark = "";
     // let snarkyWaitingLine = "";
     if (!this.props.finalStory) {
       waitText = `${this.state.playersStillWorking}`;
@@ -229,6 +293,9 @@ class Writingpaper extends React.Component {
     else {
       waitText = null;
       // snarkyWaitingLine = null;
+    }
+    if (this.state.showSnarkyWaitingLine && !this.state.everyoneHasSubmitted && !this.props.finalStory) {
+      snark = ` ${this.state.snarkyWaitingLine}`;
     }
 
     //variables, logic and so on here
@@ -246,6 +313,7 @@ class Writingpaper extends React.Component {
     if (spaceCounter === 0) {
       lastLine = previousPersonsWriting.slice(length - 50, length);
     }
+
       return (
         //the organization here is wrong, but the components are there
         <div>
@@ -286,7 +354,7 @@ class Writingpaper extends React.Component {
                     defaultValue={this.state.nudgeText} />
                   </div>
                   <p>
-                    Finish the story. No character limit. Submit when ready.
+                    Finish the story (no character limit).
                   </p>
                 </div>
               )
@@ -314,7 +382,7 @@ class Writingpaper extends React.Component {
               {!this.state.storySubmitted &&
                 !this.state.submitStory &&
                 this.state.charactersLeft > 15 && !this.state.isLastRound ? (
-                <Button variant="primary" disabled>Submit writing</Button>
+                <Button variant="primary" disabled>Submit</Button>
                 ) : (
                 <div>
                 </div>
@@ -325,7 +393,7 @@ class Writingpaper extends React.Component {
                 !this.state.submitStory &&
                 this.state.charactersLeft <= 15) || (this.state.isLastRound && !this.state.storySubmitted &&
                   !this.state.submitStory) ? (
-                    <Button variant="primary" onClick={this.tryToSubmit}>Submit writing</Button>
+                    <Button variant="primary" onClick={this.tryToSubmit}>Submit</Button>
                 ) : (
                 <div>
                 </div>
@@ -347,7 +415,7 @@ class Writingpaper extends React.Component {
             </div>
           ) : (
             <div>
-              {waitText}
+              {waitText}{snark}
             </div>
           )
         }

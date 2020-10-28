@@ -69,16 +69,23 @@ copyCodeToClipboard = () => {
       // axios.get(`http://localhost:4000/games/${this.props.gameId}/players`)
       axios.get(`api/players/${this.props.gameId}/player`)
         // .then(game => this.setState({ gameInfo: game.data[0].players }));
-        .then(game => this.setState({
-          gameInfo: game.data[0].players,
-          gameStarted: game.data[0].gameStarted,
-          // removablePlayers: game.data[0].removablePlayers
-        }));
-        console.log(this.state.gameInfo);
-        this.props.updateAllPlayers(this.state.gameInfo);
-        this.props.updateRemovablePlayers();
+        .then(game => this.updateAllTheThings(game));
+        // .then(game => this.setState({
+        //   gameInfo: game.data[0].players,
+        //   gameStarted: game.data[0].gameStarted,
+        //   // removablePlayers: game.data[0].removablePlayers
+        // }));
+        // console.log(this.state.gameInfo);
+        // this.props.updateAllPlayers(this.state.gameInfo);
+        // this.props.updateRemovablePlayers();
         // this.props.updateRemovablePlayers();
     }
+  }
+
+  updateAllTheThings = (game) => {
+    this.props.updateAllPlayers(game.data[0].players);
+    this.props.updateRemovablePlayers();
+    this.setState({ gameStarted: game.data[0].gameStarted });
   }
 
   // beginGame = (e) => {
@@ -109,7 +116,7 @@ copyCodeToClipboard = () => {
 // }
 
   render() {
-    let players = this.state.gameInfo;
+    let players = this.props.allPlayers;
     let playerBoard = [];
     for (let i = 0; i < players.length; i++) {
       playerBoard.push(players[i].name);
@@ -145,13 +152,13 @@ copyCodeToClipboard = () => {
             
             <CopyToClipboard text={this.props.gameIdUrl}
               onCopy={() => this.setState({copied: true, copySuccess: "Link copied!"})}>
-              <Button variant="warning">Copy link</Button>
+              <Button variant="warning">Copy Link</Button>
             </CopyToClipboard>
             <p>
             </p>{this.state.copySuccess}
     
             <p></p><h2>Who's Joined:</h2>
-            {this.state.gameInfo !== "Default" && this.state.gameInfo !== null ? (
+            {this.props.allPlayers !== [{name: "Loading Players", _id: "Test ID"}] && this.props.allPlayers !== null ? (
               <div>
                 {playerBoard.map((item) => {
                   return(
@@ -172,7 +179,8 @@ copyCodeToClipboard = () => {
     
           {!this.state.gameStarted && !this.props.isHost ? (
             <div>
-              Waiting for host to start game ...
+              <p></p>
+              <em>Waiting for host to start game ...</em>
             </div>
           ) : (
             <div>
@@ -191,7 +199,7 @@ copyCodeToClipboard = () => {
             </div>
           )}
 
-          {!this.state.gameStarted && this.props.isHost && this.state.gameInfo.length <= 1 ? (
+          {!this.state.gameStarted && this.props.isHost && this.props.allPlayers.length <= 1 ? (
             <div>
             <p></p>
               <Link to='/writing'>
@@ -203,7 +211,7 @@ copyCodeToClipboard = () => {
             </div>
           )}
     
-          {!this.state.gameStarted && this.props.isHost && this.state.gameInfo.length > 1 ? (
+          {!this.state.gameStarted && this.props.isHost && this.props.allPlayers.length > 1 ? (
             <div>
             <p></p>
               <Link to='/writing'>

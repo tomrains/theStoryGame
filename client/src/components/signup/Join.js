@@ -14,7 +14,8 @@ class Join extends React.Component {
       playerName: null,
       playerAvatar: null,
       playerSubmitted: false,
-      gameHasStarted: null
+      gameHasStarted: null,
+      doesGameExist: true
     }
   }
 
@@ -97,6 +98,8 @@ class Join extends React.Component {
 
   getCodeFromURL = () => {
     if (this.props.gameId !== "" && this.props.gameId !== null) { //recently added lines of code
+      console.log("there's already a gameId, so you probably came here from the homepage");
+      this.grabGameInfo(this.props.gameId);
       return;
     }
     const URL = window.location.href;
@@ -137,19 +140,36 @@ class Join extends React.Component {
     this.props.updateGameIdUrl(gameIdUrl);
     console.log(gameId);
     // Check server for game - need to add error functionality to this
-    axios.get(`api/${gameId}`)
+    this.props.updateGameId(gameId);
+    this.grabGameInfo(gameId);
+  }
+
+  grabGameInfo = (gameId) => {
+    console.log(`the game id is ${gameId}`);
+    axios.get(`/join/api/${gameId}`)
       //this should have an if statement. how do we do those?
       // .then(res => console.log((res.data[0].rounds)));
       .then((res) => {
+        console.log(`the data from the backend is ${res.data}`);
+        console.log(`the data from the backend is ${res.data[0]}`);
+        console.log(`the data from the backend is ${res.data[0].rounds}`);
+        console.log(`the data from the backend is ${res.data[0].gameStarted}`);
+        console.log(`the data from the backend is ${res.data[0].doesGameExist}`);
         this.props.howManyRounds(res.data[0].rounds);
         this.hasGameStarted(res.data[0].gameStarted);
+        this.doesGameExist(res.data[0].doesGameExist);
       });
-    this.props.updateGameId(gameId);
   }
 
-  componentDidMount() {
+  componentDidMount() { 
+    this.updateState(); //switched order of these 2
     this.getCodeFromURL();
-    this.updateState();
+  }
+
+  doesGameExist = (doesGameExist) => {
+    if (doesGameExist === false) {
+      this.setState({ doesGameExist: false });
+    }
   }
 
   hasGameStarted = (hasStarted) => {
@@ -161,9 +181,10 @@ class Join extends React.Component {
   render() {
     return <div>
 
-    {this.state.gameHasStarted ? (
+    {this.state.gameHasStarted || !this.state.doesGameExist ? (
         <div>
-          Oops! It looks like this game has already started.
+          Oops! Either this game has already started, or it doesn't exist.
+          <p></p>
           <p>
             <Link to='/'>
               <Button

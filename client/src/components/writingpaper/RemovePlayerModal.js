@@ -13,18 +13,21 @@ function RemovePlayerModal(props) {
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     console.log("heeey");
+    if (props.allPlayers.length < 3) {
+      return;
+    }
     if (props.allPlayers[props.allPlayers.length - 1] !== props.removablePlayers[props.removablePlayers.length - 1]) {
       props.updateRemovablePlayers();
       // counter = counter + 3;
     }
   });
 
-  if (props.removablePlayers.length > 1) {
+  if (props.allPlayers.length > 2) {
   return (
     <>
 
       <Button variant="danger" onClick={handleShow}>
-        Remove player
+        Remove Player
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -71,7 +74,7 @@ function RemovePlayerModal(props) {
   else {
     return (
       <Button variant="danger" onClick={handleShow} disabled>
-        <em>Remove player</em>
+        <em>Remove Player</em>
       </Button>
     )
   }

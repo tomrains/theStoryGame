@@ -119,15 +119,16 @@ class App extends Component {
 
 
   updateGameId = (gameIdValue) => {
-    this.setState({ gameId: gameIdValue })
+    this.setState({ gameId: gameIdValue });
   }
 
   updateGameIdUrl = (gameIdUrl) => {
-    this.setState({ gameIdUrl: gameIdUrl })
+    console.log(`the gameIdUrl is ${gameIdUrl}`);
+    this.setState({ gameIdUrl: gameIdUrl });
   }
 
   updateHost = () => {
-    this.setState({ isHost: true })
+    this.setState({ isHost: true });
   }
 
   removeHostStatus = () => {
@@ -305,6 +306,7 @@ class App extends Component {
               rounds = {this.state.rounds} 
               updateAllPlayers = {this.updateAllPlayers}
               updateRemovablePlayers = {this.updateRemovablePlayers}
+              allPlayers={this.state.allPlayers}
               />
             )}
           />

@@ -21,6 +21,7 @@ class MainPage extends React.Component {
 
   updateGameIdValue = (e) => {
     this.props.updateGameId(e.target.value);
+    this.props.updateGameIdUrl(e.target.value);
   }
 
   updateGameIdNow = () => {

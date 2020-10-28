@@ -37,7 +37,11 @@ const GameSchema = new mongoose.Schema({
     },
     storiesSubmitted: [],
     storiesReturned: [],
-    storyTexts: []
+    storyTexts: [],
+    doesGameExist: {
+      type: Boolean,
+      default: true
+    }
 });
 
 module.exports = mongoose.model('game', GameSchema);

@@ -33,10 +33,9 @@ class Storyrevealed extends React.Component {
           <p>{this.props.finalStory}</p>
           <CopyToClipboard text={this.props.finalStory}
             onCopy={() => this.setState({copied: true, copySuccess: "Story copied!"})}>
-            <Button variant="warning">Copy story</Button>
+            <Button variant="warning">Copy Story</Button>
           </CopyToClipboard>
-        <p>
-        </p>{this.state.copySuccess}
+        <p></p> {this.state.copySuccess} <p></p>
           <button class="btn btn-success">
             <Link to='/'>Play Again</Link>
           </button>

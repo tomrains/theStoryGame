@@ -90,6 +90,7 @@ router.get('/storiesSubmitted/:code/:round', (req, res) => {
     }
 
     let allSubmittedDoubleCheck = true;
+    let showSnarkyWaitingLine = false;
     //adding in double check to see if that helps
     for (let y = 0; y < length; y++) {
       //search through the array for the round to see if all true
@@ -119,7 +120,8 @@ router.get('/storiesSubmitted/:code/:round', (req, res) => {
         playersStillWorking = newArrayOfWorkers;
       }
       else {
-        playersStillWorking = "Just waiting on " + playersStillWorking + " to finish."
+        playersStillWorking = "Just waiting on " + playersStillWorking + " to finish.";
+        showSnarkyWaitingLine = true;
       }
     }
     if (allSubmitted && allSubmittedDoubleCheck) {
@@ -133,7 +135,8 @@ router.get('/storiesSubmitted/:code/:round', (req, res) => {
     let storyInfo = {
       everyoneHasSubmitted: allSubmitted,
       playersStillWorking: playersStillWorking,
-      newNumber: newNumber
+      newNumber: newNumber,
+      showSnarkyWaitingLine: showSnarkyWaitingLine
     }
     res.json(storyInfo);
   });
@@ -296,7 +299,7 @@ router.put('/:code/:playerId/finalStory', (req, res) => {
     let storyNeeded;
     let rounds = game.rounds;
     let length = game.originalPlayers.length; //this used to be game.players.length
-    
+    let counter = 0;
     //Look to see if you shouldn't be receiving your story because deleted player messed things up
     if (game.storyBeginningsNotReturned.indexOf(playerNumber) !== -1) { //if you have to change your number
       //figure out what index is
@@ -304,11 +307,16 @@ router.put('/:code/:playerId/finalStory', (req, res) => {
       let index = game.storyBeginningsNotReturned.indexOf(playerNumber);
       console.log(`the index in the storyBeginningsNotReturned array is ${index}`);
       playerNumber = game.deletedPlayersNumbers[index];
-      while (game.storyBeginningsNotReturned.indexOf(playerNumber) !== -1) { //if this number is also in storyBeginningsNotReturned
-        playerNumber = playerNumber + 1;
-        while (playerNumber >= game.originalPlayers.length) {
-          playerNumber = 0;
+      while (game.storyBeginningsNotReturned.indexOf(playerNumber) !== -1 ) { //if this number is also in storyBeginningsNotReturned
+        counter = counter + 1;
+        if (counter > 2 * length) {
+          return;
         }
+        neededIndex = game.deletedPlayersNumbers.indexOf(playerNumber);//index of THIS number in the players deleted array
+        playerNumber = game.deletedPlayersNumbers[neededIndex];
+        // while (playerNumber >= game.originalPlayers.length) {
+        //   playerNumber = 0;
+        // }
       }
       console.log(`the new playerNumber is now ${playerNumber}`);
     }
