@@ -62,7 +62,7 @@ class HomeScreen extends React.Component {
   updateGameIdValue = (e) => {
     let gameId = e.target.value.toUpperCase();
     this.props.updateGameId(gameId);
-    this.props.updateGameIdUrl(`localhost:3000/join/${gameId}`);
+    this.props.updateGameIdUrl(`secret-wildwood-99621.herokuapp.com/join/${gameId}`);
   }
 
   gameURLGenerator = () => {
@@ -74,7 +74,7 @@ class HomeScreen extends React.Component {
     for ( var i = 0; i < 4; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    let gameIdUrl = `localhost:3000/join/${result}`;
+    let gameIdUrl = `secret-wildwood-99621.herokuapp.com/join/${result}`;
     
     // let gameIdUrl = `secret-wildwood-99621.herokuapp.com/join/${result}`;
 
