@@ -81,7 +81,7 @@ router.put('/:code/startGame', (req, res) => {
       // console.log("player array of falses added")
     }
     game.storiesReturned = returnArray;
-    game.originalNumberOfPlayers = game.players.length;
+    // game.originalNumberOfPlayers = game.players.length;
 
     // Initialize storyText array where stories will be stored
     let draftsLocation = game.storyTexts;
@@ -99,7 +99,7 @@ router.put('/:code/startGame', (req, res) => {
     game.markModified('storiesSubmitted');
     game.markModified('storiesReturned');
     game.markModified('storyTexts');
-    game.markModified('originalNumberOfPlayers');
+    // game.markModified('originalNumberOfPlayers');
     game.save();
     // console.log(game.storiesSubmitted);
     // console.log(game.storiesReturned);

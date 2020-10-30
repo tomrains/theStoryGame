@@ -12,7 +12,7 @@ function RemovePlayerModal(props) {
   // let counter = 0;
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
-    console.log("heeey");
+    // console.log("heeey");
     if (props.allPlayers.length < 3) {
       return;
     }

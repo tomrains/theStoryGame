@@ -102,7 +102,7 @@ class Writingpaper extends React.Component {
   }
 
   getPlayers = () => {
-    console.log(this.props.gameId);
+    // console.log(this.props.gameId);
     axios.get(`api/players/${this.props.gameId}/player`)
       .then(game => this.props.updateAllPlayers(game.data[0].players)); 
   }
@@ -116,7 +116,7 @@ class Writingpaper extends React.Component {
     let info1 = {
       round: this.state.currentRound
     }
-    console.log(`this.state.currentRound is ${this.state.currentRound}`);
+    // console.log(`this.state.currentRound is ${this.state.currentRound}`);
     axios.get(`api/stories/storiesSubmitted/${this.props.gameId}/${this.state.currentRound}`, info1)
       .then(res => this.setState({
         everyoneHasSubmitted: res.data.everyoneHasSubmitted,
@@ -152,7 +152,7 @@ class Writingpaper extends React.Component {
 
     //if everyone has submitted and you don't have any writing and it's not the last round, go for story
     if (this.state.everyoneHasSubmitted && this.state.previousPersonsWriting === "Example" && !this.state.isLastRound) {
-      console.log("do the request for the story that is rightfully yours");
+      // console.log("do the request for the story that is rightfully yours");
       let info3 = {
         code: this.props.gameId,
         newPlayerNumber: this.state.newPlayerNumber
@@ -196,7 +196,7 @@ class Writingpaper extends React.Component {
   putWriting = (e) => {
     // e.preventDefault();
     this.setState({ playersStillWorking: "Submitting story..." });
-    console.log("and here we are");
+    // console.log("and here we are");
     let playerStory = {
       code: this.props.gameId,
       story: this.state.story,
@@ -233,7 +233,7 @@ class Writingpaper extends React.Component {
   }
 
   tryToSubmit = (e) => {
-    console.log("try to submit");
+    // console.log("try to submit");
     this.setState({ submitStory: true });
   }
 
@@ -242,11 +242,11 @@ class Writingpaper extends React.Component {
   }
 
   quitGame = () => {
-    console.log("They're ready to quit!");
+    // console.log("They're ready to quit!");
   }
 
   updateSnarkyWaitingLine = () => {
-    console.log("we're inside updateSnarkyWaitingLine");
+    // console.log("we're inside updateSnarkyWaitingLine");
     let newSnarkyLine = this.snarkyWaitingLines[Math.floor(Math.random() * (this.snarkyWaitingLines.length - 1))];
     this.setState({ snarkyWaitingLine: newSnarkyLine });
   }
@@ -311,7 +311,6 @@ class Writingpaper extends React.Component {
     }
 
       return (
-        //the organization here is wrong, but the components are there
         <div>
           {!this.state.storySubmitted && !this.props.hasFinalStory ? (
           <div>

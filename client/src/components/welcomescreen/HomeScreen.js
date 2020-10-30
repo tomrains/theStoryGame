@@ -53,7 +53,7 @@ class HomeScreen extends React.Component {
   }
 
   deleteDefaultText = (e) => {
-    console.log("hey");
+    // console.log("hey");
     if (e.target.value === "Enter 4-letter game code") {
       e.target.value = "";
     }
@@ -67,7 +67,7 @@ class HomeScreen extends React.Component {
 
   gameURLGenerator = () => {
     // this.props.updateHost(); //okay maybe this wasnt actually needed
-    console.log('hey');
+    // console.log('hey');
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var charactersLength = characters.length;
@@ -86,8 +86,8 @@ class HomeScreen extends React.Component {
     let newGame = {
         code: result
     };
-    console.log("about to post a new game");
-    console.log(`the new game code is ${newGame.code}`);
+    // console.log("about to post a new game");
+    // console.log(`the new game code is ${newGame.code}`);
     // axios.post('/add', newGame)
     // axios.post('http://localhost:4000/games/add', newGame)
     axios.post('/api/games/add', newGame)
@@ -109,7 +109,7 @@ class HomeScreen extends React.Component {
           avatar: this.props.playerAvatar,
         }
     };
-    console.log(newGameInfo);
+    // console.log(newGameInfo);
     axios.put('api/players/add/:code', newGameInfo)
     // axios.put('/add/:code', newGameInfo)
         .then(res => this.props.updatePlayerId(res.data.playerId));

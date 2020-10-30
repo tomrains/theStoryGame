@@ -41,27 +41,15 @@ class App extends Component {
   }
 
   removePlayer = (round) => {
-    // console.log("remove player");
-    // console.log(e);
-    // console.log(e.target);
-    // console.log(e.target.className);
-    // console.log(e.target.name);
-    // console.log(e.target.type);
-    // console.log(e.target.id);
-    // console.log(e.target.playernumber);
-    // console.log(e.target.playerId);
-    // let info = {
-    //   playerId: this.state.playerToDelete,
-    // }
     let newRemovablePlayers = [];
-    console.log(`newRemovablePlayers is ${newRemovablePlayers}`);
+    // console.log(`newRemovablePlayers is ${newRemovablePlayers}`);
     for (let i = 0; i < this.state.removablePlayers.length; i++) {
       if (i !== this.state.playerNumberToDelete - 1) {
         newRemovablePlayers.push(this.state.removablePlayers[i]);
-        console.log(`newRemovablePlayers is now ${newRemovablePlayers}`);
+        // console.log(`newRemovablePlayers is now ${newRemovablePlayers}`);
       }
     }
-    console.log(`newRemovablePlayers is finally ${newRemovablePlayers}`);
+    // console.log(`newRemovablePlayers is finally ${newRemovablePlayers}`);
     this.setState({ removablePlayers: newRemovablePlayers });
     axios.put(`api/players/delete/${this.state.gameId}/${this.state.appLevelRound}/${this.state.playerToDelete}`)
         .then(res => this.setState({ 
@@ -123,7 +111,7 @@ class App extends Component {
   }
 
   updateGameIdUrl = (gameIdUrl) => {
-    console.log(`the gameIdUrl is ${gameIdUrl}`);
+    // console.log(`the gameIdUrl is ${gameIdUrl}`);
     this.setState({ gameIdUrl: gameIdUrl });
   }
 
@@ -156,7 +144,7 @@ class App extends Component {
 
   hostSetsRoundNumber = (e) => {
     this.setState({ rounds: e.target.value });
-    console.log("howdy");
+    // console.log("howdy");
   }
 
   updateName = (e) => {
@@ -195,48 +183,48 @@ class App extends Component {
     //   return;
     // }
     if (playerInfo) {
-      console.log("we got some player info!");
+      // console.log("we got some player info!");
       let removablePlayers = [];
       for (let i = 1; i < playerInfo.length; i++) {
         removablePlayers.push(playerInfo[i]);
-        console.log(`removablePlayers is now ${removablePlayers}`);
+        // console.log(`removablePlayers is now ${removablePlayers}`);
       }
-      console.log(`OUT OF THE LOOP. removablePlayers is now ${removablePlayers}`);
+      // console.log(`OUT OF THE LOOP. removablePlayers is now ${removablePlayers}`);
       this.setState({ removablePlayers: removablePlayers });
     }
     else {
       let removablePlayers = [];
       for (let i = 1; i < this.state.allPlayers.length; i++) {
         removablePlayers.push(this.state.allPlayers[i]);
-        console.log(`removablePlayers is now ${removablePlayers}`);
+        // console.log(`removablePlayers is now ${removablePlayers}`);
       }
-      console.log(`OUT OF THE LOOP. removablePlayers is now ${removablePlayers}`);
+      // console.log(`OUT OF THE LOOP. removablePlayers is now ${removablePlayers}`);
       this.setState({ removablePlayers: removablePlayers });
     }
     this.updatePlayerToDelete(false, this.state.removablePlayers[0]);
   }
 
   updatePlayerToDelete = (e, playerNumber) => {
-    console.log("wer're in UpdatePlayerToDelete");
+    // console.log("wer're in UpdatePlayerToDelete");
     // console.log(e);
     // console.log(playerNumber);
     // console.log(e.target.funtime);
     // console.log(e.target.className);
     // console.log(e.target.type);
     if (e && playerNumber) {
-      console.log("there is an e and playerNumber");
-      console.log(e);
-      console.log(e.target);
-      console.log(e.target.id);
+      // console.log("there is an e and playerNumber");
+      // console.log(e);
+      // console.log(e.target);
+      // console.log(e.target.id);
       playerNumber = parseInt(playerNumber);
-      console.log(playerNumber);
+      // console.log(playerNumber);
       this.setState({ 
       playerToDelete: e.target.id,
       playerNumberToDelete: playerNumber 
       });
     }
     else if (!e && playerNumber) { // If you've just deleted a player and want to update the Removable Players
-    console.log("there is no e, but there is a playerNumber");
+    // console.log("there is no e, but there is a playerNumber");
       this.setState({ 
         playerToDelete: null,
         playerNumberToDelete: null
@@ -246,14 +234,14 @@ class App extends Component {
       if (this.state.playerToDelete === null && this.state.playerNumberToDelete === null) {
         return;
       }
-      console.log("there isn't an e or a playerNumber");
+      // console.log("there isn't an e or a playerNumber");
       this.setState({ 
         playerToDelete: null,
         playerNumberToDelete: null
       }); 
     }
     else {
-      console.log("theres no playerNumber");
+      // console.log("theres no playerNumber");
       return;
     }
     // console.log(e.target);

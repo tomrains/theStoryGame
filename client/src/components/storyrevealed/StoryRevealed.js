@@ -6,13 +6,6 @@ import { Button } from 'react-bootstrap';
 
 import "./storyrevealed.css";
 
-// import FullStory from './subcomponents/FullStory.js';
-// import GameMasterPlayAgain from './subcomponents/GameMasterPlayAgain.js';
-// import HideMyStory from './subcomponents/HideMyStory.js';
-// import SaveMyStory from './subcomponents/SaveMyStory.js';
-
-// import Button from 'react-bootstrap/Button';
-
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 class Storyrevealed extends React.Component {

@@ -79,8 +79,8 @@ class Join extends React.Component {
       name: this.props.playerName + " " + this.props.playerAvatar,
       avatar: this.props.playerAvatar
     }
-    console.log(player);
-    console.log(`the gameid in putPlayer is: ${this.props.gameId}`);
+    // console.log(player);
+    // console.log(`the gameid in putPlayer is: ${this.props.gameId}`);
     axios.put(`api/players/${this.props.gameId}`, player)
     .then((res) => {
       this.props.updatePlayerNumber(res.data.playerNumber);
@@ -98,7 +98,7 @@ class Join extends React.Component {
 
   getCodeFromURL = () => {
     if (this.props.gameId !== "" && this.props.gameId !== null) { //recently added lines of code
-      console.log("there's already a gameId, so you probably came here from the homepage");
+      // console.log("there's already a gameId, so you probably came here from the homepage");
       this.grabGameInfo(this.props.gameId);
       return;
     }
@@ -138,14 +138,14 @@ class Join extends React.Component {
     }
     let gameIdUrl = `secret-wildwood-99621.herokuapp.com/join/${gameId}`;
     this.props.updateGameIdUrl(gameIdUrl);
-    console.log(gameId);
+    // console.log(gameId);
     // Check server for game - need to add error functionality to this
     this.props.updateGameId(gameId);
     this.grabGameInfo(gameId);
   }
 
   grabGameInfo = (gameId) => {
-    console.log(`the game id is ${gameId}`);
+    // console.log(`the game id is ${gameId}`);
     axios.get(`/join/api/${gameId}`)
       //this should have an if statement. how do we do those?
       // .then(res => console.log((res.data[0].rounds)));
