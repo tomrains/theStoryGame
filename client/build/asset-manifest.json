@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/theStoryGame/static/css/main.f2895dc2.chunk.css",
+    "main.js": "/theStoryGame/static/js/main.18db8343.chunk.js",
+    "main.js.map": "/theStoryGame/static/js/main.18db8343.chunk.js.map",
+    "runtime-main.js": "/theStoryGame/static/js/runtime-main.6107d3eb.js",
+    "runtime-main.js.map": "/theStoryGame/static/js/runtime-main.6107d3eb.js.map",
+    "static/css/2.11829350.chunk.css": "/theStoryGame/static/css/2.11829350.chunk.css",
+    "static/js/2.ee13aea0.chunk.js": "/theStoryGame/static/js/2.ee13aea0.chunk.js",
+    "static/js/2.ee13aea0.chunk.js.map": "/theStoryGame/static/js/2.ee13aea0.chunk.js.map",
+    "index.html": "/theStoryGame/index.html",
+    "precache-manifest.a23280d73186f6ad06436e1f1f89d8e5.js": "/theStoryGame/precache-manifest.a23280d73186f6ad06436e1f1f89d8e5.js",
+    "service-worker.js": "/theStoryGame/service-worker.js",
+    "static/css/2.11829350.chunk.css.map": "/theStoryGame/static/css/2.11829350.chunk.css.map",
+    "static/css/main.f2895dc2.chunk.css.map": "/theStoryGame/static/css/main.f2895dc2.chunk.css.map",
+    "static/js/2.ee13aea0.chunk.js.LICENSE.txt": "/theStoryGame/static/js/2.ee13aea0.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6107d3eb.js",
+    "static/css/2.11829350.chunk.css",
+    "static/js/2.ee13aea0.chunk.js",
+    "static/css/main.f2895dc2.chunk.css",
+    "static/js/main.18db8343.chunk.js"
+  ]
+}

@@ -8,7 +8,9 @@
     "server": "nodemon server",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "predeploy": "cd client && npm run build",
+    "deploy": "cd client && gh-pages -d build"
   },
   "author": "Tom Rains",
   "license": "MIT",
@@ -36,6 +38,8 @@
   },
   "devDependencies": {
     "concurrently": "^5.0.0",
-    "nodemon": "^2.0.4"
+    "gh-pages": "^3.1.0",
+    "nodemon": "^2.0.4",
+    "react-scripts": "3.0.1"
   }
 }
